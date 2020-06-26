@@ -13,12 +13,10 @@ cd "$(git rev-parse --show-toplevel)"
 echo '{
   "values": [' > "$LOAD_FILE"
 
-values="$(printf '    "_em:%s\",\n' $(
-    find 'data/_em/functions' -name 'init.mcfunction' |
-      cut -d '/' -f 4- |
-      cut -d '.' -f -1 |
-      sort
-  ))"
+values="$(find 'data' -name 'init.mcfunction' |
+  sed 's#^data/\([^/]*\)/functions/\([^.]*\)\.mcfunction$#    "\1:\2",#' |
+  sort
+)"
 
 echo "$values" | sed "$(echo "$values" | wc -l)s/,\$//" >> "$LOAD_FILE"
 
