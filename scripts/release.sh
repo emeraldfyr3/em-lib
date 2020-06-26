@@ -1,6 +1,8 @@
 #!/bin/bash
 
+# cd to repo root
 cd "$(dirname ${BASH_SOURCE[0]})"
+cd "$(git rev-parse --show-toplevel)"
 
 mcversion="$1"
 [ "$mcversion" ] || read -p 'Target Minecraft Version: ' mcversion
