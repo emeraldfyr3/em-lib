@@ -1,6 +1,7 @@
 {
   "values": [
     "_em:math/random/init",
+    "_em:math/randomp/init",
     "_em:scoretp/init"
   ]
 }
