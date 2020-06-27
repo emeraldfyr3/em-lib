@@ -4,7 +4,7 @@
 #!param em math_in1 Lower bound
 #!param em math_in2 Upper bound
 
-#!return em math_out Random integer within the range [lower, upper]
+#!return em math_out Random integer within the range [lower, upper)
 
 #!objective em
 
@@ -19,6 +19,6 @@ scoreboard players add #randomp em 12345
 scoreboard players operation math_out em = #randomp em
 
 scoreboard players operation math_in2 em -= math_in1 em
-scoreboard players operation math_out %= math_in2 em
+scoreboard players operation math_out em %= math_in2 em
 scoreboard players operation math_out em += math_in1 em
 scoreboard players operation math_in2 em += math_in1 em
