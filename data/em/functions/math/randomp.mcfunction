@@ -20,5 +20,6 @@ scoreboard players operation math_out em = #randomp em
 
 scoreboard players operation math_in2 em -= math_in1 em
 scoreboard players operation math_out em %= math_in2 em
+execute if score math_in2 em matches 0 run scoreboard players set math_out em 0
 scoreboard players operation math_out em += math_in1 em
 scoreboard players operation math_in2 em += math_in1 em

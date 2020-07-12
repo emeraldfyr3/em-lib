@@ -3,7 +3,7 @@
 #!param em math_in1 Lower bound
 #!param em math_in2 Upper bound
 
-#!return em math_out Random integer within the range [lower, upper]
+#!return em math_out Random integer within the range [lower, upper)
 
 #!objective em
 
@@ -43,5 +43,6 @@ execute if predicate _em:1_2 run scoreboard players add math_out em 1
 
 scoreboard players operation math_in2 em -= math_in1 em
 scoreboard players operation math_out em %= math_in2 em
+execute if score math_in2 em matches 0 run scoreboard players set math_out em 0
 scoreboard players operation math_out em += math_in1 em
 scoreboard players operation math_in2 em += math_in1 em
