@@ -1,8 +1,11 @@
 scoreboard objectives add em dummy
 
+scoreboard players set #32768 em 32768
+scoreboard players set #65536 em 65536
 scoreboard players set #1103515245 em 1103515245
 scoreboard players set #-2147483648 em -2147483648
 
+# Set a random seed
 execute if predicate _em:1_2 run scoreboard players operation #randomp em += #-2147483648 em
 execute if predicate _em:1_2 run scoreboard players add #randomp em 1073741824
 execute if predicate _em:1_2 run scoreboard players add #randomp em 536870912
