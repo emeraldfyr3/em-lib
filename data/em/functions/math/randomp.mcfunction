@@ -18,20 +18,18 @@
 # x = x * a + c
 # a = 1103515245, c = 12345
 
-# Generate a number
+# Generate a number and copy to #em_var1
 scoreboard players operation #randomp em *= #1103515245 em
-scoreboard players add #randomp em 12345
+execute store result score #em_var1 em run scoreboard players add #randomp em 12345
 
 # Use the sign bit and upper 15 bits of the first generated number as the sign and lower 15 of the output
-scoreboard players operation #em_var1 em = #randomp em
 scoreboard players operation #em_var1 em /= #65536 em
 
-# Generate another number
+# Generate another number and copy to math_out
 scoreboard players operation #randomp em *= #1103515245 em
-scoreboard players add #randomp em 12345
+execute store result score math_out em run scoreboard players add #randomp em 12345
 
 # Use the upper 16 bits of the second generated number as the upper 16 of the output
-scoreboard players operation math_out em = #randomp em
 scoreboard players operation math_out em /= #32768 em
 scoreboard players operation math_out em *= #32768 em
 
@@ -42,7 +40,6 @@ scoreboard players operation math_out em += #em_var1 em
 
 # Fit to range
 scoreboard players operation math_in2 em -= math_in1 em
-scoreboard players operation math_out em %= math_in2 em
-execute if score math_in2 em matches 0 run scoreboard players set math_out em 0
+execute store result score math_out em run scoreboard players operation math_out em %= math_in2 em
 scoreboard players operation math_out em += math_in1 em
 scoreboard players operation math_in2 em += math_in1 em
