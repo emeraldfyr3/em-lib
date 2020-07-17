@@ -1,4 +1,5 @@
 #!doc "Truly" random number generator. Distribution is approximately uniform for small numbers.
+#!doc Maximum range size (upper - lower) is 2147483647.
 
 #!param em math_in1 Lower bound
 #!param em math_in2 Upper bound
@@ -7,8 +8,9 @@
 
 #!objective em
 
-scoreboard players set math_out em 0
+#!constant -2147483648 em
 
+execute if predicate _em:1_2 run scoreboard players operation math_out em += #-2147483648 em
 execute if predicate _em:1_2 run scoreboard players add math_out em 1073741824
 execute if predicate _em:1_2 run scoreboard players add math_out em 536870912
 execute if predicate _em:1_2 run scoreboard players add math_out em 268435456

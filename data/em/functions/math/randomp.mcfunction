@@ -1,5 +1,6 @@
 #!doc Pseudorandom number generator. Distribution is approximately uniform for small numbers.
-#!doc Credit: CloudWolf
+#!doc Maximum range size (upper - lower) is 2147483647.
+#!doc Credit: Cloud Wolf
 
 #!param em math_in1 Lower bound
 #!param em math_in2 Upper bound

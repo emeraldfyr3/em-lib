@@ -1,4 +1,5 @@
 #!doc "Truly" random number generator with uniform distribution.
+#!doc Maximum range size (upper - lower) is 2147483647.
 
 #!param em math_in1 Lower bound
 #!param em math_in2 Upper bound
