@@ -93,7 +93,7 @@ done <<< "$(ls data | sed 's/^_//' | sort -u)"
 echo '{
   "values": [' > "$LOAD_FILE"
 
-values="$(find 'data' -name 'init.mcfunction' |
+values="$(find 'data' -name '_init.mcfunction' -or -name 'init.mcfunction' |
   sed 's#^data/\([^/]*\)/functions/\([^.]*\)\.mcfunction$#    "\1:\2",#' |
   sort
 )"
