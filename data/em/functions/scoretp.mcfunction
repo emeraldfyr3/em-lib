@@ -1,3 +1,15 @@
+#!doc Teleport an entity to coordinates in scoreboard values.
+#!doc The coordinates are relative to where the command is positioned.
+#!doc To use the coordinates as absolute, position the command at 0,0,0.
+
+#!param scoretp_x relative x coordinate
+#!param scoretp_y relative y coordinate
+#!param scoretp_z relative z coordinate
+
+#!objective scoretp_x
+#!objective scoretp_y
+#!objective scoretp_z
+
 tp @s ~ ~ ~
 
 execute if score @s scoretp_x matches 1.. run function _em:scoretp/x

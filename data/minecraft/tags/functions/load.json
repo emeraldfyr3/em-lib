@@ -1,8 +1,6 @@
 {
   "values": [
-    "_em:math/random/init",
-    "_em:math/randomp/init",
-    "_em:math/randomu/init",
-    "_em:scoretp/init"
+    "_em:_init",
+    "_em:math/randomp/init"
   ]
 }

@@ -10,37 +10,45 @@ LOAD_FILE='data/minecraft/tags/functions/load.json'
 cd "$(dirname ${BASH_SOURCE[0]})"
 cd "$(git rev-parse --show-toplevel)"
 
+echo "Starting build for $(basename "$(pwd)")..."
 
-# Generate _init functions
 
-while read namespace
+echo 'Generating _init functions...'
+
+# A package includes public and private namespaces.
+# The public namespace is the package name, e.g. "em".
+# The private namespace is the package name prefixed by an underscore, e.g. "_em".
+while read package
 do
+  echo " - package '${package}'"
   objectives=
   constants=
   scores=
 
-  if [ -d "data/${namespace}/functions" ]
-  then
-    while read file
-    do
-      objectives="$objectives"$'\n'"$(cat "$file" | grep '^#!objective ' | cut -d ' ' -f 2-)"
-      constants="$constants"$'\n'"$(cat "$file" | grep '^#!constant ' | cut -d ' ' -f 2-)"
-      scores="$scores"$'\n'"$(cat "$file" | grep '^#!score ' | cut -d ' ' -f 2-)"
-    done <<< "$(find "data/${namespace}/functions" -name '*.mcfunction')"
-  fi
+  for namespace in "$package" "_${package}"
+  do
+    if [ -d "data/${namespace}/functions" ]
+    then
+      while read file
+      do
+        objectives="$objectives"$'\n'"$(cat "$file" | grep '^#!objective ' | cut -d ' ' -f 2-)"
+        constants="$constants"$'\n'"$(cat "$file" | grep '^#!constant ' | cut -d ' ' -f 2-)"
+        scores="$scores"$'\n'"$(cat "$file" | grep '^#!score ' | cut -d ' ' -f 2-)"
+      done <<< "$(find "data/${namespace}/functions" -name '*.mcfunction')"
+    fi
+  done
 
-  # Remove the leading newline
-  objectives="$(echo "$objectives" | tail -n +2)"
-  constants="$(echo "$constants" | tail -n +2)"
-  scores="$(echo "$scores" | tail -n +2)"
+  # Remove empty lines
+  objectives="$(echo "$objectives" | awk 'NF')"
+  constants="$(echo "$constants" | awk 'NF')"
+  scores="$(echo "$scores" | awk 'NF')"
 
   if [ "$objectives" ] || [ "$constants" ] || [ "$scores" ]
   then
-    [ -d "data/_${namespace}/functions" ] || mkdir -p "data/_${namespace}/functions"
+    [ -d "data/_${package}/functions" ] || mkdir -p "data/_${package}/functions"
     echo "\
 ##### GENERATED FILE -- DO NOT EDIT #####
-
-$([ "$objectives" ] && echo "\
+$([ "$objectives" ] && echo "
 # Objectives
 $(
   while read objective
@@ -52,9 +60,9 @@ $(
     echo "scoreboard objectives add ${name} ${type}"
   done <<< "$(echo "$objectives" | sort -u)"
 )
-")
+")\
+$([ "$constants" ] && echo "
 
-$([ "$constants" ] && echo "\
 # Constants
 $(
   while read constant
@@ -66,9 +74,9 @@ $(
     echo "scoreboard players set #${value} ${objective} ${value}"
   done <<< "$(echo "$constants" | sort -u)"
 )
-")
+")\
+$([ "$scores" ] && echo "
 
-$([ "$scores" ] && echo "\
 # Scores
 $(
   while read score
@@ -80,13 +88,13 @@ $(
     echo "scoreboard players set ${player} ${objective} ${value}"
   done <<< "$(echo "$scores" | sort -u)"
 )
-")
-" > "data/_${namespace}/functions/_init.mcfunction"
+")\
+" > "data/_${package}/functions/_init.mcfunction"
   fi
 done <<< "$(ls data | sed 's/^_//' | sort -u)"
 
 
-# Generate load tags for init functions
+echo 'Adding init functions to the minecraft:load tag...'
 
 [ -d "$(dirname "$LOAD_FILE")" ] || mkdir -p "$(dirname "$LOAD_FILE")"
 
@@ -102,3 +110,5 @@ echo "$values" | sed "$(echo "$values" | wc -l)s/,\$//" >> "$LOAD_FILE"
 
 echo '  ]
 }' >> "$LOAD_FILE"
+
+echo "Done: $(basename "$(pwd)")"
