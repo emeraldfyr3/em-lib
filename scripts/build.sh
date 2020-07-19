@@ -1,8 +1,18 @@
 #!/bin/bash
 
-# Script to generate init files and add to minecraft:load tag
+# Script to generate initialization functions and add to minecraft:load tag
 #
-# This script scans for files named "init.mcfunction" and adds them to the load tag.
+# One _init.mcfunction is generated per package.
+# A package includes public and private namespaces.
+# The public namespace is the package name, e.g. "em".
+# The private namespace is the package name prefixed by an underscore, e.g. "_em".
+# The generated init file is placed in the private namespace.
+#
+# Init files are generated based on compiler directives. Available directives:
+# #!constant <value> [objective]           # Set a scoreboard constant: player name is "#<value>", score is <value>. Default objective is "constant".
+# #!init <function>                        # Run another function on initialization.
+# #!objective <name> [type] [displayname]  # Create a scoreboard objective. Default type is dummy, default displayname is the name.
+# #!score <player> <objective> [value]     # Set a player's score, or reset the score if no value is given.
 
 LOAD_FILE='data/minecraft/tags/functions/load.json'
 
@@ -15,9 +25,6 @@ echo "Starting build for $(basename "$(pwd)")..."
 
 echo 'Generating _init functions...'
 
-# A package includes public and private namespaces.
-# The public namespace is the package name, e.g. "em".
-# The private namespace is the package name prefixed by an underscore, e.g. "_em".
 while read package
 do
   echo " - package '${package}'"
@@ -88,7 +95,12 @@ $(
     objective="$(echo "${score} " | cut -d ' ' -f 2)"
     value="$(echo "${score} " | cut -d ' ' -f 3)"
 
-    echo "scoreboard players set ${player} ${objective} ${value}"
+    if [ "$value" ]
+    then
+      echo "scoreboard players set ${player} ${objective} ${value}"
+    else
+      echo "scoreboard players reset ${player} ${objective}"
+    fi
   done <<< "$(echo "$scores" | sort -u)"
 )
 ")\
