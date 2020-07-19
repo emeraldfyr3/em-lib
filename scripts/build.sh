@@ -32,10 +32,10 @@ do
     then
       while read file
       do
-        objectives="$objectives"$'\n'"$(cat "$file" | grep '^#!objective ' | cut -d ' ' -f 2-)"
-        constants="$constants"$'\n'"$(cat "$file" | grep '^#!constant ' | cut -d ' ' -f 2-)"
-        scores="$scores"$'\n'"$(cat "$file" | grep '^#!score ' | cut -d ' ' -f 2-)"
-        inits="$inits"$'\n'"$(cat "$file" | grep '^#!init ' | cut -d ' ' -f 2-)"
+        objectives="${objectives}$(grep '^#!objective ' "$file" | cut -d ' ' -f 2-)"$'\n'
+        constants="${constants}$(grep '^#!constant ' "$file" | cut -d ' ' -f 2-)"$'\n'
+        scores="${scores}$(grep '^#!score ' "$file" | cut -d ' ' -f 2-)"$'\n'
+        inits="${inits}$(grep '^#!init ' "$file" | cut -d ' ' -f 2-)"$'\n'
       done <<< "$(find "data/${namespace}/functions" -name '*.mcfunction')"
     fi
   done
@@ -109,14 +109,14 @@ $(
 done <<< "$(ls data | sed 's/^_//' | sort -u)"
 
 
-echo 'Adding init functions to the minecraft:load tag...'
+echo 'Adding _init functions to the minecraft:load tag...'
 
 [ -d "$(dirname "$LOAD_FILE")" ] || mkdir -p "$(dirname "$LOAD_FILE")"
 
 echo '{
   "values": [' > "$LOAD_FILE"
 
-values="$(find 'data' -name '_init.mcfunction' -or -name 'init.mcfunction' |
+values="$(find 'data' -name '_init.mcfunction' |
   sed 's#^data/\([^/]*\)/functions/\([^.]*\)\.mcfunction$#    "\1:\2",#' |
   sort
 )"
