@@ -24,6 +24,7 @@ do
   objectives=
   constants=
   scores=
+  inits=
 
   for namespace in "$package" "_${package}"
   do
@@ -34,6 +35,7 @@ do
         objectives="$objectives"$'\n'"$(cat "$file" | grep '^#!objective ' | cut -d ' ' -f 2-)"
         constants="$constants"$'\n'"$(cat "$file" | grep '^#!constant ' | cut -d ' ' -f 2-)"
         scores="$scores"$'\n'"$(cat "$file" | grep '^#!score ' | cut -d ' ' -f 2-)"
+        inits="$inits"$'\n'"$(cat "$file" | grep '^#!init ' | cut -d ' ' -f 2-)"
       done <<< "$(find "data/${namespace}/functions" -name '*.mcfunction')"
     fi
   done
@@ -42,8 +44,9 @@ do
   objectives="$(echo "$objectives" | awk 'NF')"
   constants="$(echo "$constants" | awk 'NF')"
   scores="$(echo "$scores" | awk 'NF')"
+  inits="$(echo "$inits" | awk 'NF')"
 
-  if [ "$objectives" ] || [ "$constants" ] || [ "$scores" ]
+  if [ "$objectives" ] || [ "$constants" ] || [ "$scores" ] || [ "$inits" ]
   then
     [ -d "data/_${package}/functions" ] || mkdir -p "data/_${package}/functions"
     echo "\
@@ -87,6 +90,18 @@ $(
 
     echo "scoreboard players set ${player} ${objective} ${value}"
   done <<< "$(echo "$scores" | sort -u)"
+)
+")\
+$([ "$inits" ] && echo "
+
+# Initialization Functions
+$(
+  while read init
+  do
+    function="$(echo "${init} " | cut -d ' ' -f 1)"
+
+    echo "function ${function}"
+  done <<< "$(echo "$inits" | sort -u)"
 )
 ")\
 " > "data/_${package}/functions/_init.mcfunction"

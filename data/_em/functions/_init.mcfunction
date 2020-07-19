@@ -42,3 +42,6 @@ scoreboard players set #-2147483648 em -2147483648
 scoreboard players set #1103515245 em 1103515245
 scoreboard players set #32768 em 32768
 scoreboard players set #65536 em 65536
+
+# Initialization Functions
+function _em:math/randomp/reseed

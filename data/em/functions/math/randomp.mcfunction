@@ -14,6 +14,8 @@
 #!constant 1103515245 em
 #!constant -2147483648 em
 
+#!init _em:math/randomp/reseed
+
 # LCG Seed Implementation
 # x = x * a + c
 # a = 1103515245, c = 12345
