@@ -9,6 +9,7 @@
 # The generated init file is placed in the private namespace.
 #
 # Init files are generated based on compiler directives. Available directives:
+# #!bossbar <id> [name]                    # Create a bossbar. Default name is "".
 # #!constant <value> [objective]           # Set a scoreboard constant: player name is "#<value>", score is <value>. Default objective is "constant".
 # #!init <function>                        # Run another function on initialization.
 # #!objective <name> [type] [displayname]  # Create a scoreboard objective. Default type is dummy, default displayname is the name.
@@ -31,6 +32,7 @@ do
   objectives=
   constants=
   scores=
+  bossbars=
   inits=
 
   for namespace in "$package" "_${package}"
@@ -42,6 +44,7 @@ do
         objectives="${objectives}$(grep '^#!objective ' "$file" | cut -d ' ' -f 2-)"$'\n'
         constants="${constants}$(grep '^#!constant ' "$file" | cut -d ' ' -f 2-)"$'\n'
         scores="${scores}$(grep '^#!score ' "$file" | cut -d ' ' -f 2-)"$'\n'
+        bossbars="${bossbars}$(grep '^#!bossbar ' "$file" | cut -d ' ' -f 2-)"$'\n'
         inits="${inits}$(grep '^#!init ' "$file" | cut -d ' ' -f 2-)"$'\n'
       done <<< "$(find "data/${namespace}/functions" -name '*.mcfunction')"
     fi
@@ -51,14 +54,16 @@ do
   objectives="$(echo "$objectives" | awk 'NF')"
   constants="$(echo "$constants" | awk 'NF')"
   scores="$(echo "$scores" | awk 'NF')"
+  bossbars="$(echo "$bossbars" | awk 'NF')"
   inits="$(echo "$inits" | awk 'NF')"
 
-  if [ "$objectives" ] || [ "$constants" ] || [ "$scores" ] || [ "$inits" ]
+  if [ "$objectives" ] || [ "$constants" ] || [ "$scores" ] || [ "$bossbars" ] || [ "$inits" ]
   then
     [ -d "data/_${package}/functions" ] || mkdir -p "data/_${package}/functions"
     echo "\
-##### GENERATED FILE -- DO NOT EDIT #####
+##### GENERATED FILE -- DO NOT EDIT #####\
 $([ "$objectives" ] && echo "
+
 # Objectives
 $(
   while read objective
@@ -102,6 +107,20 @@ $(
       echo "scoreboard players reset ${player} ${objective}"
     fi
   done <<< "$(echo "$scores" | sort -u)"
+)
+")\
+$([ "$bossbars" ] && echo "
+
+# Boss Bars
+$(
+  while read bossbar
+  do
+    id="$(echo "${bossbar} " | cut -d ' ' -f 1)"
+    name="$(echo "${bossbar} " | cut -d ' ' -f 2)"
+    [ "$name" ] || name='""'
+
+    echo "bossbar add ${id} ${name}"
+  done <<< "$(echo "$bossbars" | sort -u)"
 )
 ")\
 $([ "$inits" ] && echo "
