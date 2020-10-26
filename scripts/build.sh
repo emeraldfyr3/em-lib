@@ -23,17 +23,16 @@ cd "$(git rev-parse --show-toplevel)"
 
 echo "Starting build for $(basename "$(pwd)")..."
 
-
 echo 'Generating _init functions...'
 
 while read package
 do
   echo " - package '${package}'"
-  objectives=
-  constants=
-  scores=
   bossbars=
+  constants=
   inits=
+  objectives=
+  scores=
 
   for namespace in "$package" "_${package}"
   do
@@ -41,23 +40,38 @@ do
     then
       while read file
       do
-        objectives="${objectives}$(grep '^#!objective ' "$file" | cut -d ' ' -f 2-)"$'\n'
-        constants="${constants}$(grep '^#!constant ' "$file" | cut -d ' ' -f 2-)"$'\n'
-        scores="${scores}$(grep '^#!score ' "$file" | cut -d ' ' -f 2-)"$'\n'
-        bossbars="${bossbars}$(grep '^#!bossbar ' "$file" | cut -d ' ' -f 2-)"$'\n'
-        inits="${inits}$(grep '^#!init ' "$file" | cut -d ' ' -f 2-)"$'\n'
+        while read line
+        do
+          case "$line" in
+            '#!bossbar '*)
+              bossbars="${bossbars}${line#* }"$'\n'
+              ;;
+            '#!constant '*)
+              constants="${constants}${line#* }"$'\n'
+              ;;
+            '#!init '*)
+              inits="${inits}${line#* }"$'\n'
+              ;;
+            '#!objective '*)
+              objectives="${objectives}${line#* }"$'\n'
+              ;;
+            '#!score '*)
+              scores="${scores}${line#* }"$'\n'
+              ;;
+          esac
+        done < "$file"
       done <<< "$(find "data/${namespace}/functions" -name '*.mcfunction')"
     fi
   done
 
   # Remove empty lines
-  objectives="$(echo "$objectives" | awk 'NF')"
-  constants="$(echo "$constants" | awk 'NF')"
-  scores="$(echo "$scores" | awk 'NF')"
   bossbars="$(echo "$bossbars" | awk 'NF')"
+  constants="$(echo "$constants" | awk 'NF')"
   inits="$(echo "$inits" | awk 'NF')"
+  objectives="$(echo "$objectives" | awk 'NF')"
+  scores="$(echo "$scores" | awk 'NF')"
 
-  if [ "$objectives" ] || [ "$constants" ] || [ "$scores" ] || [ "$bossbars" ] || [ "$inits" ]
+  if [ "$bossbars" ] || [ "$constants" ] || [ "$inits" ] || [ "$objectives" ] || [ "$scores" ]
   then
     [ -d "data/_${package}/functions" ] || mkdir -p "data/_${package}/functions"
     echo "\
