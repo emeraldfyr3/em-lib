@@ -13,6 +13,8 @@ cd "$(git rev-parse --show-toplevel)"
 mcversion="$1"
 [ "$mcversion" ] || read -p 'Target Minecraft Version: ' mcversion
 
+git fetch --tags
+
 packversion="$(( $(git tag -l | grep "^${mcversion}" | cut -d 'v' -f 2 | sort -h | tail -n 1) + 1 ))"
 release="${mcversion}-v${packversion}"
 filename="release/$(basename "$(pwd)")-${release}.zip"
