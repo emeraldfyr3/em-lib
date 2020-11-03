@@ -1,6 +1,6 @@
 # em-lib
 
-**emeraldfyr3's Standard Function Library**
+**emeraldfyr3's Utility Function Library**
 
 ## Download
 Download the release for your Minecraft version here: https://github.com/emeraldfyr3/em-lib/releases
