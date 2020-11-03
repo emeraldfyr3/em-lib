@@ -1,6 +1,9 @@
+#!objective scoretp_z
+
 scoreboard players operation #scoretp__distance scoretp_z = @s scoretp_z
 
 # Negative direction
+
 execute if score #scoretp__distance scoretp_z matches ..-16777216 at @s run tp @s ~ ~ ~-16777216
 execute if score #scoretp__distance scoretp_z matches ..-16777216 run scoreboard players add #scoretp__distance scoretp_z 16777216
 

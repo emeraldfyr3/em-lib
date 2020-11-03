@@ -1,6 +1,9 @@
+#!objective scoretp_y
+
 scoreboard players operation #scoretp__distance scoretp_y = @s scoretp_y
 
 # Negative direction
+
 execute if score #scoretp__distance scoretp_y matches ..-4096 at @s run tp @s ~ ~-4096 ~
 execute if score #scoretp__distance scoretp_y matches ..-4096 run scoreboard players add #scoretp__distance scoretp_y 4096
 

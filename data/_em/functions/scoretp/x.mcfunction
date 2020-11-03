@@ -1,6 +1,9 @@
+#!objective scoretp_x
+
 scoreboard players operation #scoretp__distance scoretp_x = @s scoretp_x
 
 # Positive direction
+
 execute if score #scoretp__distance scoretp_x matches 16777216.. at @s run tp @s ~16777216 ~ ~
 execute if score #scoretp__distance scoretp_x matches 16777216.. run scoreboard players remove #scoretp__distance scoretp_x 16777216
 
