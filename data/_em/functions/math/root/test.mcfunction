@@ -27,6 +27,24 @@ function em:math/root
 execute unless score math_out em = expected test_em run scoreboard players set result test_em 0
 execute unless score math_out em = expected test_em run tellraw @s ["em:math/root failed with inputs ", {"score": {"name": "math_in1", "objective": "em"}}, " and ", {"score": {"name": "math_in2", "objective": "em"}}, ": expected ", {"score": {"name": "expected", "objective": "test_em"}}, ", observed ", {"score": {"name": "math_out", "objective": "em"}}]
 
+# 3√94818816 == 456
+scoreboard players set math_in1 em 3
+scoreboard players set math_in2 em 94818816
+scoreboard players set expected test_em 456
+scoreboard players set math_out 0
+function em:math/root
+execute unless score math_out em = expected test_em run scoreboard players set result test_em 0
+execute unless score math_out em = expected test_em run tellraw @s ["em:math/root failed with inputs ", {"score": {"name": "math_in1", "objective": "em"}}, " and ", {"score": {"name": "math_in2", "objective": "em"}}, ": expected ", {"score": {"name": "expected", "objective": "test_em"}}, ", observed ", {"score": {"name": "math_out", "objective": "em"}}]
+
+# 2√1031887129 == 32123
+scoreboard players set math_in1 em 2
+scoreboard players set math_in2 em 1031887129
+scoreboard players set expected test_em 32123
+scoreboard players set math_out 0
+function em:math/root
+execute unless score math_out em = expected test_em run scoreboard players set result test_em 0
+execute unless score math_out em = expected test_em run tellraw @s ["em:math/root failed with inputs ", {"score": {"name": "math_in1", "objective": "em"}}, " and ", {"score": {"name": "math_in2", "objective": "em"}}, ": expected ", {"score": {"name": "expected", "objective": "test_em"}}, ", observed ", {"score": {"name": "math_out", "objective": "em"}}]
+
 # 30√1073741824 == 2
 scoreboard players set math_in1 em 30
 scoreboard players set math_in2 em 1073741824
@@ -72,9 +90,9 @@ function em:math/root
 execute unless score math_out em = expected test_em run scoreboard players set result test_em 0
 execute unless score math_out em = expected test_em run tellraw @s ["em:math/root failed with inputs ", {"score": {"name": "math_in1", "objective": "em"}}, " and ", {"score": {"name": "math_in2", "objective": "em"}}, ": expected ", {"score": {"name": "expected", "objective": "test_em"}}, ", observed ", {"score": {"name": "math_out", "objective": "em"}}]
 
-# 31√-2147483648 == -2
-scoreboard players set math_in1 em 31
-scoreboard players set math_in2 em -2147483648
+# 29√-536870912 == -2
+scoreboard players set math_in1 em 29
+scoreboard players set math_in2 em -536870912
 scoreboard players set expected test_em -2
 scoreboard players set math_out 0
 function em:math/root
