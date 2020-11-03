@@ -20,6 +20,6 @@ execute if score @s scoretp_z matches 1.. run function _em:scoretp/z
 execute if score @s scoretp_z matches ..-1 run function _em:scoretp/nz
 
 # If the chunk is not already loaded, load it quickly for non-player entities.
-execute at @s store success score #em_var1 scoretp_x run forceload query ~ ~
-execute unless score #em_var1 scoretp_x matches 1 at @s[type=!minecraft:player] run forceload add ~ ~
-execute unless score #em_var1 scoretp_x matches 1 at @s[type=!minecraft:player] run forceload remove ~ ~
+execute at @s store success score #scoretp__chunk_loaded scoretp_x run forceload query ~ ~
+execute unless score #scoretp__chunk_loaded scoretp_x matches 1 at @s[type=!minecraft:player] run forceload add ~ ~
+execute unless score #scoretp__chunk_loaded scoretp_x matches 1 at @s[type=!minecraft:player] run forceload remove ~ ~
