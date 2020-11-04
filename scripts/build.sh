@@ -173,26 +173,32 @@ makeTestFiles() {
 
     if [ "${tests[$i]}" ]
     then
-      echo "\
+      printf "\
 ##### GENERATED FILE -- DO NOT EDIT #####
 
 scoreboard objectives add ${objective} dummy
 scoreboard players set successes ${objective} 0
 scoreboard players set failures ${objective} 0
-$(
-  while read test
-  do
-    echo "
+
+" > "${testFiles[$i]}"
+
+      while read test
+      do
+        printf "\
 scoreboard players set ran ${objective} 0
 scoreboard players set result ${objective} 0
 execute store success score ran ${objective} run function $(fileToFunction <<< "$test")
 execute if score result ${objective} matches 0 run scoreboard players add failures ${objective} 1
-execute unless score result ${objective} matches 0 run scoreboard players add successes ${objective} 1"
-  done <<< "${tests[$i]}"
-)
+execute unless score result ${objective} matches 0 run scoreboard players add successes ${objective} 1
 
-tellraw @s [\"Tests completed with \", {\"score\": {\"name\": \"successes\", \"objective\": \"${objective}\"}}, \" success(es) and \", {\"score\": {\"name\": \"failures\", \"objective\": \"${objective}\"}}, \" failure(s).\"]\
-" > "${testFiles[$i]}"
+" >> "${testFiles[$i]}"
+      done <<< "${tests[$i]}"
+
+      printf "execute %s score successes ${objective} matches 1 %s score failures ${objective} matches 1 run tellraw @s [\"Tests completed with \", {\"score\": {\"name\": \"successes\", \"objective\": \"${objective}\"}}, \" %s and \", {\"score\": {\"name\": \"failures\", \"objective\": \"${objective}\"}}, \" %s.\"]\n"\
+        'if' 'if' 'success' 'failure'\
+        'if' 'unless' 'success' 'failures'\
+        'unless' 'if' 'successes' 'failure'\
+        'unless' 'unless' 'successes' 'failures' >> "${testFiles[$i]}"
 
       echo "  - file '${testFiles[$i]}'"
     fi
