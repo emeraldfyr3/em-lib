@@ -15,24 +15,22 @@
 # #!objective <name> [type] [displayname]  # Create a scoreboard objective. Default type is dummy, default displayname is the name.
 # #!score <player> <objective> [value]     # Set a player's score, or reset the score if no value is given.
 
-LOAD_FILE='data/minecraft/tags/functions/load.json'
+fileToFunction() {
+  sed 's#^data/\([^/]*\)/functions/\([^.]*\)\.mcfunction$#\1:\2#'
+}
 
-# cd to repo root
-cd "$(dirname ${BASH_SOURCE[0]})"
-cd "$(git rev-parse --show-toplevel)"
+makeInitFile() {
+  local package="$1"
 
-echo "Starting build for $(basename "$(pwd)")..."
+  local initFile="data/_${package}/functions/_init.mcfunction"
 
-echo 'Generating _init functions...'
+  local bossbars=
+  local constants=
+  local inits=
+  local objectives=
+  local scores=
 
-while read package
-do
-  echo " - package '${package}'"
-  bossbars=
-  constants=
-  inits=
-  objectives=
-  scores=
+  [ -f "$initFile" ] && rm "$initFile"
 
   for namespace in "$package" "_${package}"
   do
@@ -60,18 +58,18 @@ do
               ;;
           esac
         done < "$file"
-      done <<< "$(find "data/${namespace}/functions" -name '*.mcfunction')"
+      done <<< "$(find "data/${namespace}/functions" -name '*.mcfunction' -not -path "data/${namespace}/functions/test/*")"
     fi
   done
 
   # Remove empty lines
-  bossbars="$(echo "$bossbars" | awk 'NF')"
-  constants="$(echo "$constants" | awk 'NF')"
-  inits="$(echo "$inits" | awk 'NF')"
-  objectives="$(echo "$objectives" | awk 'NF')"
-  scores="$(echo "$scores" | awk 'NF')"
+  bossbars="$(awk 'NF' <<< "$bossbars")"
+  constants="$(awk 'NF' <<< "$constants")"
+  inits="$(awk 'NF' <<< "$inits")"
+  objectives="$(awk 'NF' <<< "$objectives")"
+  scores="$(awk 'NF' <<< "$scores")"
 
-  if [ "$bossbars" ] || [ "$constants" ] || [ "$inits" ] || [ "$objectives" ] || [ "$scores" ]
+  if [ "${bossbars}${constants}${inits}${objectives}${scores}" ]
   then
     [ -d "data/_${package}/functions" ] || mkdir -p "data/_${package}/functions"
     echo "\
@@ -149,26 +147,95 @@ $(
   done <<< "$(echo "$inits" | sort -u)"
 )
 ")\
-" > "data/_${package}/functions/_init.mcfunction"
+" > "$initFile"
+
+    echo "  - file '${initFile}'"
   fi
+}
+
+makeTestFiles() {
+  local package="$1"
+
+  local publicTests="$([ -d "data/${package}/functions/test" ] && find "data/${package}/functions/test" -name '*.mcfunction')"
+  local allTests="$(awk 'NF' <<< "$publicTests"$'\n'"$([ -d "data/_${package}/functions/test" ] && find "data/_${package}/functions/test" -name '*.mcfunction')")"
+
+  local tests=("$publicTests" "$allTests")
+  local testFiles=(
+    "data/${package}/functions/test.mcfunction"
+    "data/_${package}/functions/test.mcfunction"
+  )
+
+  local objective="test_${package}"
+
+  for (( i=0; i<${#tests[@]}; i++ ))
+  do
+    [ -f "${testFiles[$i]}" ] && rm "${testFiles[$i]}"
+
+    if [ "${tests[$i]}" ]
+    then
+      echo "\
+##### GENERATED FILE -- DO NOT EDIT #####
+
+scoreboard objectives add ${objective} dummy
+scoreboard players set successes ${objective} 0
+scoreboard players set failures ${objective} 0
+$(
+  while read test
+  do
+    echo "
+scoreboard players set ran ${objective} 0
+scoreboard players set result ${objective} 0
+execute store success score ran ${objective} run function $(fileToFunction <<< "$test")
+execute if score result ${objective} matches 0 run scoreboard players add failures ${objective} 1
+execute unless score result ${objective} matches 0 run scoreboard players add successes ${objective} 1"
+  done <<< "${tests[$i]}"
+)
+
+tellraw @s [\"Tests completed with \", {\"score\": {\"name\": \"successes\", \"objective\": \"${objective}\"}}, \" success(es) and \", {\"score\": {\"name\": \"failures\", \"objective\": \"${objective}\"}}, \" failure(s).\"]\
+" > "${testFiles[$i]}"
+
+      echo "  - file '${testFiles[$i]}'"
+    fi
+  done
+}
+
+makeLoadFile() {
+  local loadFile='data/minecraft/tags/functions/load.json'
+
+  [ -d "$(dirname "$loadFile")" ] || mkdir -p "$(dirname "$loadFile")"
+
+  echo '{
+  "values": [' > "$loadFile"
+
+  values="$(find 'data' -name '_init.mcfunction' |
+    fileToFunction |
+    sort |
+    sed 's/^/    "/;s/$/",/'
+  )"
+
+  echo "$values" | sed "$(echo "$values" | wc -l)s/,\$//" >> "$loadFile"
+
+  echo '  ]
+}' >> "$loadFile"
+}
+
+### Main ###
+
+# cd to repo root
+cd "$(dirname ${BASH_SOURCE[0]})"
+cd "$(git rev-parse --show-toplevel)"
+
+echo "Starting build for $(basename "$(pwd)")..."
+
+while read package
+do
+  echo "- package '${package}'"
+  makeInitFile "$package"
+  makeTestFiles "$package"
 done <<< "$(ls data | sed 's/^_//' | sort -u)"
 
 
 echo 'Adding _init functions to the minecraft:load tag...'
-
-[ -d "$(dirname "$LOAD_FILE")" ] || mkdir -p "$(dirname "$LOAD_FILE")"
-
-echo '{
-  "values": [' > "$LOAD_FILE"
-
-values="$(find 'data' -name '_init.mcfunction' |
-  sed 's#^data/\([^/]*\)/functions/\([^.]*\)\.mcfunction$#    "\1:\2",#' |
-  sort
-)"
-
-echo "$values" | sed "$(echo "$values" | wc -l)s/,\$//" >> "$LOAD_FILE"
-
-echo '  ]
-}' >> "$LOAD_FILE"
+makeLoadFile
 
 echo "Done: $(basename "$(pwd)")"
