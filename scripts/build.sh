@@ -208,21 +208,26 @@ execute unless score result ${objective} matches 0 run scoreboard players add su
 makeLoadFile() {
   local loadFile='data/minecraft/tags/functions/load.json'
 
-  [ -d "$(dirname "$loadFile")" ] || mkdir -p "$(dirname "$loadFile")"
-
-  echo '{
-  "values": [' > "$loadFile"
-
   values="$(find 'data' -name '_init.mcfunction' |
     fileToFunction |
     sort |
     sed 's/^/    "/;s/$/",/'
   )"
 
-  echo "$values" | sed "$(echo "$values" | wc -l)s/,\$//" >> "$loadFile"
+  if [ "$values" ]
+  then
+    [ -d "$(dirname "$loadFile")" ] || mkdir -p "$(dirname "$loadFile")"
 
-  echo '  ]
+    echo '{
+  "values": [' > "$loadFile"
+    echo "$values" | sed "$(echo "$values" | wc -l)s/,\$//" >> "$loadFile"
+    echo '  ]
 }' >> "$loadFile"
+
+    echo "- file '${loadFile}'"
+  else
+    [ -f "$loadFile" ] && rm "$loadFile"
+  fi
 }
 
 ### Main ###
@@ -231,7 +236,7 @@ makeLoadFile() {
 cd "$(dirname ${BASH_SOURCE[0]})"
 cd "$(git rev-parse --show-toplevel)"
 
-echo "Starting build for $(basename "$(pwd)")..."
+echo "Building $(basename "$(pwd)")..."
 
 while read package
 do
@@ -240,8 +245,6 @@ do
   makeTestFiles "$package"
 done <<< "$(ls data | sed 's/^_//' | sort -u)"
 
-
-echo 'Adding _init functions to the minecraft:load tag...'
 makeLoadFile
 
 echo "Done: $(basename "$(pwd)")"
