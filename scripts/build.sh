@@ -13,6 +13,7 @@
 # #!constant <value> <objective>           # Set a scoreboard constant: player name is "#<value>", objective is <objective>, score is <value>.
 # #!init <function>                        # Run another function on initialization.
 # #!objective <name> [type] [displayname]  # Create a scoreboard objective. Default type is dummy, default displayname is the name.
+# #!reset <function>                       # Run another function on reset.
 # #!score <player> <objective> [value]     # Set a player's score, or reset the score if no value is given.
 
 dirDocs() {
@@ -180,14 +181,17 @@ makeInitFile() {
   local package="$1"
 
   local initFile="data/_${package}/functions/_init.mcfunction"
+  local resetFile="data/_${package}/functions/_reset.mcfunction"
 
   local bossbars=
   local constants=
   local inits=
   local objectives=
+  local resets=
   local scores=
 
   [ -f "$initFile" ] && rm "$initFile"
+  [ -f "$resetFile" ] && rm "$resetFile"
 
   for namespace in "$package" "_${package}"
   do
@@ -210,6 +214,9 @@ makeInitFile() {
             '#!objective '*)
               objectives="${objectives}${line#* }"$'\n'
               ;;
+            '#!reset '*)
+              resets="${resets}${line#* }"$'\n'
+              ;;
             '#!score '*)
               scores="${scores}${line#* }"$'\n'
               ;;
@@ -224,7 +231,10 @@ makeInitFile() {
   constants="$(awk 'NF' <<< "$constants")"
   inits="$(awk 'NF' <<< "$inits")"
   objectives="$(awk 'NF' <<< "$objectives")"
+  resets="$(awk 'NF' <<< "$resets")"
   scores="$(awk 'NF' <<< "$scores")"
+
+  # Generate init file
 
   if [ "${bossbars}${constants}${inits}${objectives}${scores}" ]
   then
@@ -307,6 +317,54 @@ $(
 
     echo "  - file '${initFile}'"
   fi
+
+  # Generate reset file
+
+  if [ "${bossbars}${objectives}${resets}" ]
+  then
+    [ -d "data/_${package}/functions" ] || mkdir -p "data/_${package}/functions"
+    echo "\
+##### GENERATED FILE -- DO NOT EDIT #####\
+$([ "$objectives" ] && echo "
+
+# Objectives
+$(
+  while read objective
+  do
+    name="$(echo "${objective} " | cut -d ' ' -f 1)"
+
+    echo "scoreboard objectives remove ${name}"
+  done <<< "$(echo "$objectives" | sort -u)"
+)
+")\
+$([ "$bossbars" ] && echo "
+
+# Boss Bars
+$(
+  while read bossbar
+  do
+    id="$(echo "${bossbar} " | cut -d ' ' -f 1)"
+
+    echo "bossbar remove ${id}"
+  done <<< "$(echo "$bossbars" | sort -u)"
+)
+")\
+$([ "$resets" ] && echo "
+
+# Reset Functions
+$(
+  while read reset
+  do
+    function="$(echo "${reset} " | cut -d ' ' -f 1)"
+
+    echo "function ${function}"
+  done <<< "$(echo "$resets" | sort -u)"
+)
+")\
+" > "$resetFile"
+
+    echo "  - file '${resetFile}'"
+  fi
 }
 
 makeLoadFile() {
@@ -357,6 +415,8 @@ makeTestFiles() {
       printf "\
 ##### GENERATED FILE -- DO NOT EDIT #####
 
+function _${package}:_reset
+function _${package}:_init
 scoreboard objectives add ${objective} dummy
 scoreboard players set successes ${objective} 0
 scoreboard players set failures ${objective} 0

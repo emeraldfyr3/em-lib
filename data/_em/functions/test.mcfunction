@@ -1,5 +1,7 @@
 ##### GENERATED FILE -- DO NOT EDIT #####
 
+function _em:_reset
+function _em:_init
 scoreboard objectives add test_em dummy
 scoreboard players set successes test_em 0
 scoreboard players set failures test_em 0
