@@ -128,10 +128,8 @@ makeDocIndex() {
 
   if [ ! -f "$indexFile" ]
   then
-    echo "\
-$(markdownBreadcrumbs "$package" "$funcName")
-
-# ${package}${funcName:+:}${funcName}" > "$indexFile"
+    [ "$funcName" ] && echo "$(markdownBreadcrumbs "$package" "$funcName")"$'\n' > "$indexFile"
+    echo "# ${package}${funcName:+:}${funcName}" >> "$indexFile"
   fi
 
   echo "
@@ -364,9 +362,7 @@ markdownBreadcrumbs() {
   local package="$1"
   local funcName="$2"
 
-  local numBreadcrumbs=1
-
-  [ "$funcName" ] && numBreadcrumbs=$(( $(grep -o '/' <<< "$funcName" | wc -l) + 2 ))
+  local numBreadcrumbs=$(( $(grep -o '/' <<< "$funcName" | wc -l) + 2 ))
 
   for (( i=1; i<=$numBreadcrumbs; i++ ))
   do
