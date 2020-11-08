@@ -16,22 +16,34 @@
 # #!reset <function>                       # Run another function on reset.
 # #!score <player> <objective> [value]     # Set a player's score, or reset the score if no value is given.
 
-dirDocs() {
+dir_docs() {
   local package="$1"
 
   echo "docs/${package}"
 }
 
-dirHelp() {
+dir_help() {
   local namespace="$1"
 
   echo "data/${namespace}/functions/help"
 }
 
-dirTest() {
+dir_test() {
   local namespace="$1"
 
   echo "data/${namespace}/functions/test"
+}
+
+file_init() {
+  local package="$1"
+
+  echo "data/_${package}/functions/_init.mcfunction"
+}
+
+file_reset() {
+  local package="$1"
+
+  echo "data/_${package}/functions/_reset.mcfunction"
 }
 
 fileToFunction() {
@@ -43,15 +55,15 @@ listFunctionFiles() {
 
   find "data/${namespace}/functions"\
     -name '*.mcfunction'\
-    -not -path "$(dirHelp "$namespace")/*"\
-    -not -path "$(dirTest "$namespace")/*"
+    -not -path "$(dir_help "$namespace")/*"\
+    -not -path "$(dir_test "$namespace")/*"
 }
 
 makeDocs() {
   local package="$1"
 
-  local docsDir="$(dirDocs "$package")"
-  local helpDir="$(dirHelp "$package")"
+  local docsDir="$(dir_docs "$package")"
+  local helpDir="$(dir_help "$package")"
 
   local funcName=
   local docFile=
@@ -139,7 +151,7 @@ makeDocIndex() {
   local package=$(cut -d '/' -f 2 <<< "$directory")
   local subDirectories="$(find -s "$directory" -depth 1 -type d)"
 
-  local docsDir="$(dirDocs "$package")"
+  local docsDir="$(dir_docs "$package")"
 
   local indexFile="${directory}.md"
   local funcName="$(cut -d '/' -f 3- <<< "$directory")"
@@ -180,8 +192,8 @@ $(
 makeInitFile() {
   local package="$1"
 
-  local initFile="data/_${package}/functions/_init.mcfunction"
-  local resetFile="data/_${package}/functions/_reset.mcfunction"
+  local initFile="$(file_init "$package")"
+  local resetFile="$(file_reset "$package")"
 
   local bossbars=
   local constants=
@@ -395,14 +407,17 @@ makeLoadFile() {
 makeTestFiles() {
   local package="$1"
 
-  local publicTestsDir="$(dirTest "$package")"
-  local privateTestsDir="$(dirTest "_${package}")"
+  local publicTestsDir="$(dir_test "$package")"
+  local privateTestsDir="$(dir_test "_${package}")"
 
   local publicTests="$([ -d "$publicTestsDir" ] && find "$publicTestsDir" -name '*.mcfunction')"
   local allTests="$(awk 'NF' <<< "$publicTests"$'\n'"$([ -d "$privateTestsDir" ] && find "$privateTestsDir" -name '*.mcfunction')")"
 
   local tests=("$publicTests" "$allTests")
   local testFiles=("${publicTestsDir}.mcfunction" "${privateTestsDir}.mcfunction")
+
+  local initFile="$(file_init "$package")"
+  local resetFile="$(file_reset "$package")"
 
   local objective="test_${package}"
 
@@ -414,9 +429,11 @@ makeTestFiles() {
     then
       printf "\
 ##### GENERATED FILE -- DO NOT EDIT #####
+$(
+  [ -f "$resetFile" ] && printf "\nfunction $(fileToFunction <<< "$resetFile")"
+  [ -f "$initFile" ] && printf "\nfunction $(fileToFunction <<< "$initFile")"
+)\
 
-function _${package}:_reset
-function _${package}:_init
 scoreboard objectives add ${objective} dummy
 scoreboard players set successes ${objective} 0
 scoreboard players set failures ${objective} 0
@@ -450,7 +467,7 @@ markdownBreadcrumbs() {
   local package="$1"
   local funcName="$2"
 
-  local docsDir="$(dirDocs "$package")"
+  local docsDir="$(dir_docs "$package")"
   local docFile="${docsDir}/${funcName}.md"
 
   local numBreadcrumbs=$(( $(grep -o '/' <<< "$funcName" | wc -l) + 2 ))
@@ -527,8 +544,8 @@ do
 
   files="$(sort <<< "$(
     makeDocs "$package" &
-    makeInitFile "$package" &
-    makeTestFiles "$package" &
+    makeInitFile "$package"
+    makeTestFiles "$package"
     wait
   )")"
 
