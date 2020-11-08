@@ -140,10 +140,10 @@ $(markdownBreadcrumbs "$package" "$funcName")
 $(
   while read funcName
   do
-    formatting="$([ -f "data/${package}/functions/${funcName}.mcfunction" ] && echo '**')"
+    formatting="*$([ -f "data/${package}/functions/$(realpath "${directory}/${funcName}" --relative-to "docs/${package}").mcfunction" ] && echo '*')"
 
     sed "s#[^/]*/#  #g;s#\([^ ]*\)\$#- [${formatting}\1${formatting}]\($(realpath "docs/${package}/${funcName}.md" --relative-to "$(dirname "$indexFile")")\)#" <<< "$funcName"
-  done <<< "$(find "docs/${package}" -name '*.md' | sed "s#^docs/${package}/##;s/\.md\$//" | sort -u)"
+  done <<< "$(find "$directory" -name '*.md' | sed "s#^${directory}/##;s/\.md\$//" | sort -u)"
 )" >> "$indexFile"
 
   echo "  - file '${indexFile}'"
