@@ -1,3 +1,5 @@
+[em](../../em.md) > [math](../math.md) > randomp
+
 # em:math/randomp
 
 Pseudorandom number generator. Distribution is approximately uniform for small numbers.

@@ -1,3 +1,5 @@
+[em](../../em.md) > [math](../math.md) > root
+
 # em:math/root
 
 Find the nth root of a number using Newton's Method for root approximation

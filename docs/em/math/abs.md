@@ -1,3 +1,5 @@
+[em](../../em.md) > [math](../math.md) > abs
+
 # em:math/abs
 
 Get the absolute value of a number

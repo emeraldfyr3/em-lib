@@ -1,3 +1,5 @@
+[em](../../em.md) > [math](../math.md) > random
+
 # em:math/random
 
 "Truly" random number generator. Distribution is approximately uniform for small numbers.

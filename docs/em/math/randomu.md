@@ -1,3 +1,5 @@
+[em](../../em.md) > [math](../math.md) > randomu
+
 # em:math/randomu
 
 "Truly" random number generator with uniform distribution.

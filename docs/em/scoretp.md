@@ -1,3 +1,5 @@
+[em](../em.md) > scoretp
+
 # em:scoretp
 
 Teleport an entity to coordinates in scoreboard values.

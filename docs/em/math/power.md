@@ -1,3 +1,5 @@
+[em](../../em.md) > [math](../math.md) > power
+
 # em:math/power
 
 Raise a number to a power

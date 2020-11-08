@@ -34,7 +34,6 @@ makeDocs() {
   local funcName=
   local docFile=
   local helpFile=
-  local numBreadcrumbs=
 
   local docComments=
   local params=
@@ -78,22 +77,10 @@ makeDocs() {
       [ -d "$(dirname "$docFile")" ] || mkdir -p "$(dirname "$docFile")"
       [ -d "$(dirname "$helpFile")" ] || mkdir -p "$(dirname "$helpFile")"
 
-      # numBreadcrumbs=$(( $(grep -o '/' <<< "$funcName" | wc -l) + 2 ))
-      # for (( i=1; i<=$numBreadcrumbs; i++ ))
-      # do
-      #   if [ $i -eq $numBreadcrumbs ]
-      #   then
-      #     printf "$(cut -d '/' -f "$i" <<< "${package}/${funcName}")" >> "$docFile"
-      #   else
-      #     printf '[%s](%s) > '\
-      #       "$(cut -d '/' -f "$i" <<< "${package}/${funcName}")"\
-      #       "$(realpath "docs/$(cut -d '/' -f "-${i}" <<< "${package}/${funcName}").md" --relative-to "$(dirname "$docFile")")"\
-      #       >> "$docFile"
-      #   fi
-      # done
+      echo "\
+$(markdownBreadcrumbs "$package" "$funcName")
 
-      # echo $'\n\n'"# ${package}:${funcName}" >> "$docFile"
-      echo "# ${package}:${funcName}" >> "$docFile"
+# ${package}:${funcName}" > "$docFile"
 
       if [ "$docComments" ]
       then
@@ -114,7 +101,52 @@ makeDocs() {
 
       echo "  - file '${docFile}'"
     done <<< "$(listFunctionFiles "$package")"
+
+    [ -f "${docsDir}.md" ] && rm "${docsDir}.md"
+    [ -d "$docsDir" ] && makeDocIndex "$docsDir"
   fi
+}
+
+makeDocIndex() {
+  local directory="${1%/}"
+
+  local package=$(cut -d '/' -f 2 <<< "$directory")
+  local subDirectories="$(find -s "$directory" -depth 1 -type d)"
+
+  local indexFile="${directory}.md"
+  local funcName="$(cut -d '/' -f 3- <<< "$directory")"
+
+  local formatting=
+
+  if [ "$subDirectories" ]
+  then
+    while read subDirectory
+    do
+      makeDocIndex "$subDirectory"
+    done <<< "$subDirectories"
+  fi
+
+  if [ ! -f "$indexFile" ]
+  then
+    echo "\
+$(markdownBreadcrumbs "$package" "$funcName")
+
+# ${package}${funcName:+:}${funcName}" > "$indexFile"
+  fi
+
+  echo "
+## Functions
+
+$(
+  while read funcName
+  do
+    formatting="$([ -f "data/${package}/functions/${funcName}.mcfunction" ] && echo '**')"
+
+    sed "s#[^/]*/#  #g;s#\([^ ]*\)\$#- [${formatting}\1${formatting}]\($(realpath "docs/${package}/${funcName}.md" --relative-to "$(dirname "$indexFile")")\)#" <<< "$funcName"
+  done <<< "$(find "docs/${package}" -name '*.md' | sed "s#^docs/${package}/##;s/\.md\$//" | sort -u)"
+)" >> "$indexFile"
+
+  echo "  - file '${indexFile}'"
 }
 
 makeInitFile() {
@@ -326,6 +358,27 @@ makeLoadFile() {
   else
     [ -f "$loadFile" ] && rm "$loadFile"
   fi
+}
+
+markdownBreadcrumbs() {
+  local package="$1"
+  local funcName="$2"
+
+  local numBreadcrumbs=1
+
+  [ "$funcName" ] && numBreadcrumbs=$(( $(grep -o '/' <<< "$funcName" | wc -l) + 2 ))
+
+  for (( i=1; i<=$numBreadcrumbs; i++ ))
+  do
+    if [ $i -eq $numBreadcrumbs ]
+    then
+      printf "$(cut -d '/' -f "$i" <<< "${package}/${funcName}")"
+    else
+      printf '[%s](%s) > '\
+        "$(cut -d '/' -f "$i" <<< "${package}/${funcName}")"\
+        "$(realpath "docs/$(cut -d '/' -f "-${i}" <<< "${package}/${funcName}").md" --relative-to "$(dirname "$docFile")")"
+    fi
+  done
 }
 
 markdownTable() {

@@ -1,3 +1,5 @@
+[em](../../em.md) > [math](../math.md) > log
+
 # em:math/log
 
 Find the logarithm of a number in the given base

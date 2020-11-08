@@ -1,3 +1,5 @@
+[em](../../em.md) > [math](../math.md) > sign
+
 # em:math/sign
 
 Get the sign of a number

@@ -1,3 +1,5 @@
+[em](../../em.md) > [math](../math.md) > factorial
+
 # em:math/factorial
 
 Calculate the factorial of a number

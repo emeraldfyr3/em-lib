@@ -1,3 +1,5 @@
+[em](../../em.md) > [math](../math.md) > divide_round
+
 # em:math/divide_round
 
 Divide two numbers and round the result to the nearest integer
