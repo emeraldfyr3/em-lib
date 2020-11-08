@@ -19,6 +19,104 @@ fileToFunction() {
   sed 's#^data/\([^/]*\)/functions/\([^.]*\)\.mcfunction$#\1:\2#'
 }
 
+listFunctionFiles() {
+  local package="$1"
+
+  find "data/${package}/functions" -name '*.mcfunction' -not -path "data/${package}/functions/test/*"
+}
+
+makeDocs() {
+  local package="$1"
+
+  local docsDir="docs/${package}"
+  local helpDir="data/${package}/functions/help"
+
+  local funcName=
+  local docFile=
+  local helpFile=
+  local numBreadcrumbs=
+
+  local docComments=
+  local params=
+  local returns=
+
+  [ -d "$docsDir" ] && rm -rf "$docsDir"
+  [ -d "$helpDir" ] && rm -rf "$helpDir"
+
+  if [ -d "data/${package}/functions" ]
+  then
+    while read file
+    do
+      funcName="$(cut -d '/' -f 4- <<< "$file" | sed 's/\.mcfunction$//')"
+      docFile="${docsDir}/${funcName}.md"
+      helpFile="${helpDir}/${funcName}.mcfunction"
+
+      docComments=
+      params=
+      returns=
+
+      while read line
+      do
+        case "$line" in
+          '#!doc '*)
+            docComments="${docComments}${line#* }"$'\n'
+            ;;
+          '#!param '*)
+            params="${params}${line#* }"$'\n'
+            ;;
+          '#!return '*)
+            returns="${returns}${line#* }"$'\n'
+            ;;
+        esac
+      done < "$file"
+
+      # Remove empty lines
+      docComments="$(awk 'NF' <<< "$docComments")"
+      params="$(awk 'NF' <<< "$params")"
+      returns="$(awk 'NF' <<< "$returns")"
+
+      [ -d "$(dirname "$docFile")" ] || mkdir -p "$(dirname "$docFile")"
+      [ -d "$(dirname "$helpFile")" ] || mkdir -p "$(dirname "$helpFile")"
+
+      # numBreadcrumbs=$(( $(grep -o '/' <<< "$funcName" | wc -l) + 2 ))
+      # for (( i=1; i<=$numBreadcrumbs; i++ ))
+      # do
+      #   if [ $i -eq $numBreadcrumbs ]
+      #   then
+      #     printf "$(cut -d '/' -f "$i" <<< "${package}/${funcName}")" >> "$docFile"
+      #   else
+      #     printf '[%s](%s) > '\
+      #       "$(cut -d '/' -f "$i" <<< "${package}/${funcName}")"\
+      #       "$(realpath "docs/$(cut -d '/' -f "-${i}" <<< "${package}/${funcName}").md" --relative-to "$(dirname "$docFile")")"\
+      #       >> "$docFile"
+      #   fi
+      # done
+
+      # echo $'\n\n'"# ${package}:${funcName}" >> "$docFile"
+      echo "# ${package}:${funcName}" >> "$docFile"
+
+      if [ "$docComments" ]
+      then
+        sed $'s/^/\\\n/' <<< "$docComments" >> "$docFile"
+      fi
+
+      if [ "$params" ]
+      then
+        printf '\n## Parameters\n\n' >> "$docFile"
+        markdownTable 3 $'Objective Player/Selector Comment\n'"$params" >> "$docFile"
+      fi
+
+      if [ "$returns" ]
+      then
+        printf '\n## Returns\n\n' >> "$docFile"
+        markdownTable 3 $'Objective Player/Selector Comment\n'"$returns" >> "$docFile"
+      fi
+
+      echo "  - file '${docFile}'"
+    done <<< "$(listFunctionFiles "$package")"
+  fi
+}
+
 makeInitFile() {
   local package="$1"
 
@@ -58,7 +156,7 @@ makeInitFile() {
               ;;
           esac
         done < "$file"
-      done <<< "$(find "data/${namespace}/functions" -name '*.mcfunction' -not -path "data/${namespace}/functions/test/*")"
+      done <<< "$(listFunctionFiles "$namespace")"
     fi
   done
 
@@ -230,6 +328,51 @@ makeLoadFile() {
   fi
 }
 
+markdownTable() {
+  local columns="$1"
+  local content="$2"
+
+  local columnWidths
+  local text=
+  local headerPrinted=
+
+  for (( col=1; col<=$columns; col++ ))
+  do
+    columnWidths[$col]=3
+  done
+
+  while read row
+  do
+    for (( col=1; col<=$columns; col++ ))
+    do
+      text="$(cut -d ' ' -f "${col}$([ $col -eq $columns ] && echo '-')" <<< "$row")"
+      [ ${#text} -gt ${columnWidths[$col]} ] && columnWidths[$col]=${#text}
+    done
+  done <<< "$content"
+
+  while read row
+  do
+    for (( col=1; col<=$columns; col++ ))
+    do
+      text="$(cut -d ' ' -f "${col}$([ $col -eq $columns ] && echo '-')" <<< "$row")"
+      printf "| ${text}%$(( ${columnWidths[$col]} - ${#text} + 1 ))s"
+    done
+
+    echo '|'
+
+    if [ ! "$headerPrinted" ]
+    then
+      for (( col=1; col<=$columns; col++ ))
+      do
+        printf "| $(printf "%${columnWidths[$col]}s" | tr ' ' '-') "
+      done
+
+      echo '|'
+      headerPrinted='true'
+    fi
+  done <<< "$content"
+}
+
 ### Main ###
 
 # cd to repo root
@@ -241,6 +384,7 @@ echo "Building $(basename "$(pwd)")..."
 while read package
 do
   echo "- package '${package}'"
+  makeDocs "$package"
   makeInitFile "$package"
   makeTestFiles "$package"
 done <<< "$(ls data | sed 's/^_//' | sort -u)"

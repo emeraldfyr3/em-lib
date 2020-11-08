@@ -2,9 +2,9 @@
 #!doc The coordinates are relative to where the command is positioned.
 #!doc To use the coordinates as absolute, position the command at 0,0,0.
 
-#!param scoretp_x relative x coordinate
-#!param scoretp_y relative y coordinate
-#!param scoretp_z relative z coordinate
+#!param scoretp_x @s relative x coordinate
+#!param scoretp_y @s relative y coordinate
+#!param scoretp_z @s relative z coordinate
 
 #!objective scoretp_x
 #!objective scoretp_y
