@@ -7,7 +7,7 @@
 
 #!objective em
 
-#!constant 2
+#!constant 2 em
 
 # #math__power__base = base, #math__power__exp1 = #math__power__exp2 = exponent, math_out = 1
 scoreboard players operation #math__power__base em = math_in1 em

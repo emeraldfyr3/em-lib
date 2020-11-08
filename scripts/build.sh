@@ -10,7 +10,7 @@
 #
 # Init files are generated based on compiler directives. Available directives:
 # #!bossbar <id> [name]                    # Create a bossbar. Default name is "".
-# #!constant <value> [objective]           # Set a scoreboard constant: player name is "#<value>", score is <value>. Default objective is "constant".
+# #!constant <value> <objective>           # Set a scoreboard constant: player name is "#<value>", objective is <objective>, score is <value>.
 # #!init <function>                        # Run another function on initialization.
 # #!objective <name> [type] [displayname]  # Create a scoreboard objective. Default type is dummy, default displayname is the name.
 # #!score <player> <objective> [value]     # Set a player's score, or reset the score if no value is given.
@@ -224,7 +224,6 @@ $(
   do
     value="$(echo "${constant} " | cut -d ' ' -f 1)"
     objective="$(echo "${constant} " | cut -d ' ' -f 2)"
-    [ "$objective" ] || objective='constant'
 
     echo "scoreboard players set #${value} ${objective} ${value}"
   done <<< "$(echo "$constants" | sort -u)"
