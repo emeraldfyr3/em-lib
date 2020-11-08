@@ -15,21 +15,42 @@
 # #!objective <name> [type] [displayname]  # Create a scoreboard objective. Default type is dummy, default displayname is the name.
 # #!score <player> <objective> [value]     # Set a player's score, or reset the score if no value is given.
 
+dirDocs() {
+  local package="$1"
+
+  echo "docs/${package}"
+}
+
+dirHelp() {
+  local namespace="$1"
+
+  echo "data/${namespace}/functions/help"
+}
+
+dirTest() {
+  local namespace="$1"
+
+  echo "data/${namespace}/functions/test"
+}
+
 fileToFunction() {
   sed 's#^data/\([^/]*\)/functions/\([^.]*\)\.mcfunction$#\1:\2#'
 }
 
 listFunctionFiles() {
-  local package="$1"
+  local namespace="$1"
 
-  find "data/${package}/functions" -name '*.mcfunction' -not -path "data/${package}/functions/test/*"
+  find "data/${namespace}/functions"\
+    -name '*.mcfunction'\
+    -not -path "$(dirHelp "$namespace")/*"\
+    -not -path "$(dirTest "$namespace")/*"
 }
 
 makeDocs() {
   local package="$1"
 
-  local docsDir="docs/${package}"
-  local helpDir="data/${package}/functions/help"
+  local docsDir="$(dirDocs "$package")"
+  local helpDir="$(dirHelp "$package")"
 
   local funcName=
   local docFile=
@@ -46,61 +67,65 @@ makeDocs() {
   then
     while read file
     do
-      funcName="$(cut -d '/' -f 4- <<< "$file" | sed 's/\.mcfunction$//')"
-      docFile="${docsDir}/${funcName}.md"
-      helpFile="${helpDir}/${funcName}.mcfunction"
+      (
+        funcName="$(cut -d '/' -f 4- <<< "$file" | sed 's/\.mcfunction$//')"
+        docFile="${docsDir}/${funcName}.md"
+        helpFile="${helpDir}/${funcName}.mcfunction"
 
-      docComments=
-      params=
-      returns=
+        docComments=
+        params=
+        returns=
 
-      while read line
-      do
-        case "$line" in
-          '#!doc '*)
-            docComments="${docComments}${line#* }"$'\n'
-            ;;
-          '#!param '*)
-            params="${params}${line#* }"$'\n'
-            ;;
-          '#!return '*)
-            returns="${returns}${line#* }"$'\n'
-            ;;
-        esac
-      done < "$file"
+        while read line
+        do
+          case "$line" in
+            '#!doc '*)
+              docComments="${docComments}${line#* }"$'\n'
+              ;;
+            '#!param '*)
+              params="${params}${line#* }"$'\n'
+              ;;
+            '#!return '*)
+              returns="${returns}${line#* }"$'\n'
+              ;;
+          esac
+        done < "$file"
 
-      # Remove empty lines
-      docComments="$(awk 'NF' <<< "$docComments")"
-      params="$(awk 'NF' <<< "$params")"
-      returns="$(awk 'NF' <<< "$returns")"
+        # Remove empty lines
+        docComments="$(awk 'NF' <<< "$docComments")"
+        params="$(awk 'NF' <<< "$params")"
+        returns="$(awk 'NF' <<< "$returns")"
 
-      [ -d "$(dirname "$docFile")" ] || mkdir -p "$(dirname "$docFile")"
-      [ -d "$(dirname "$helpFile")" ] || mkdir -p "$(dirname "$helpFile")"
+        [ -d "$(dirname "$docFile")" ] || mkdir -p "$(dirname "$docFile")"
+        [ -d "$(dirname "$helpFile")" ] || mkdir -p "$(dirname "$helpFile")"
 
-      echo "\
+        echo "\
 $(markdownBreadcrumbs "$package" "$funcName")
 
 # ${package}:${funcName}" > "$docFile"
 
-      if [ "$docComments" ]
-      then
-        sed $'s/^/\\\n/' <<< "$docComments" >> "$docFile"
-      fi
+        if [ "$docComments" ]
+        then
+          sed $'s/^/\\\n/' <<< "$docComments" >> "$docFile"
+        fi
 
-      if [ "$params" ]
-      then
-        printf '\n## Parameters\n\n' >> "$docFile"
-        markdownTable 3 $'Objective Player/Selector Comment\n'"$params" >> "$docFile"
-      fi
+        if [ "$params" ]
+        then
+          printf '\n## Parameters\n\n' >> "$docFile"
+          markdownTable 3 $'Objective Player/Selector Comment\n'"$params" >> "$docFile"
+        fi
 
-      if [ "$returns" ]
-      then
-        printf '\n## Returns\n\n' >> "$docFile"
-        markdownTable 3 $'Objective Player/Selector Comment\n'"$returns" >> "$docFile"
-      fi
+        if [ "$returns" ]
+        then
+          printf '\n## Returns\n\n' >> "$docFile"
+          markdownTable 3 $'Objective Player/Selector Comment\n'"$returns" >> "$docFile"
+        fi
 
-      echo "  - file '${docFile}'"
+        echo "  - file '${docFile}'"
+      ) &
     done <<< "$(listFunctionFiles "$package")"
+
+    wait
 
     [ -f "${docsDir}.md" ] && rm "${docsDir}.md"
     [ -d "$docsDir" ] && makeDocIndex "$docsDir"
@@ -113,6 +138,8 @@ makeDocIndex() {
   local package=$(cut -d '/' -f 2 <<< "$directory")
   local subDirectories="$(find -s "$directory" -depth 1 -type d)"
 
+  local docsDir="$(dirDocs "$package")"
+
   local indexFile="${directory}.md"
   local funcName="$(cut -d '/' -f 3- <<< "$directory")"
 
@@ -122,8 +149,10 @@ makeDocIndex() {
   then
     while read subDirectory
     do
-      makeDocIndex "$subDirectory"
+      makeDocIndex "$subDirectory" &
     done <<< "$subDirectories"
+
+    wait
   fi
 
   if [ ! -f "$indexFile" ]
@@ -138,7 +167,7 @@ makeDocIndex() {
 $(
   while read funcName
   do
-    formatting="*$([ -f "data/${package}/functions/$(realpath "${directory}/${funcName}" --relative-to "docs/${package}").mcfunction" ] && echo '*')"
+    formatting="*$([ -f "data/${package}/functions/$(realpath "${directory}/${funcName}" --relative-to "$docsDir").mcfunction" ] && echo '*')"
 
     sed "s#[^/]*/#  #g;s#\([^ ]*\)\$#- [${formatting}\1${formatting}]\($(realpath "${directory}/${funcName}.md" --relative-to "$(dirname "$indexFile")")\)#" <<< "$funcName"
   done <<< "$(find "$directory" -name '*.md' | sed "s#^${directory}/##;s/\.md\$//" | sort -u)"
@@ -280,17 +309,42 @@ $(
   fi
 }
 
+makeLoadFile() {
+  local loadFile='data/minecraft/tags/functions/load.json'
+
+  values="$(find 'data' -name '_init.mcfunction' |
+    fileToFunction |
+    sort |
+    sed 's/^/    "/;s/$/",/'
+  )"
+
+  if [ "$values" ]
+  then
+    [ -d "$(dirname "$loadFile")" ] || mkdir -p "$(dirname "$loadFile")"
+
+    echo '{
+  "values": [' > "$loadFile"
+    echo "$values" | sed "$(echo "$values" | wc -l)s/,\$//" >> "$loadFile"
+    echo '  ]
+}' >> "$loadFile"
+
+    echo "- file '${loadFile}'"
+  else
+    [ -f "$loadFile" ] && rm "$loadFile"
+  fi
+}
+
 makeTestFiles() {
   local package="$1"
 
-  local publicTests="$([ -d "data/${package}/functions/test" ] && find "data/${package}/functions/test" -name '*.mcfunction')"
-  local allTests="$(awk 'NF' <<< "$publicTests"$'\n'"$([ -d "data/_${package}/functions/test" ] && find "data/_${package}/functions/test" -name '*.mcfunction')")"
+  local publicTestsDir="$(dirTest "$package")"
+  local privateTestsDir="$(dirTest "_${package}")"
+
+  local publicTests="$([ -d "$publicTestsDir" ] && find "$publicTestsDir" -name '*.mcfunction')"
+  local allTests="$(awk 'NF' <<< "$publicTests"$'\n'"$([ -d "$privateTestsDir" ] && find "$privateTestsDir" -name '*.mcfunction')")"
 
   local tests=("$publicTests" "$allTests")
-  local testFiles=(
-    "data/${package}/functions/test.mcfunction"
-    "data/_${package}/functions/test.mcfunction"
-  )
+  local testFiles=("${publicTestsDir}.mcfunction" "${privateTestsDir}.mcfunction")
 
   local objective="test_${package}"
 
@@ -332,34 +386,12 @@ execute unless score result ${objective} matches 0 run scoreboard players add su
   done
 }
 
-makeLoadFile() {
-  local loadFile='data/minecraft/tags/functions/load.json'
-
-  values="$(find 'data' -name '_init.mcfunction' |
-    fileToFunction |
-    sort |
-    sed 's/^/    "/;s/$/",/'
-  )"
-
-  if [ "$values" ]
-  then
-    [ -d "$(dirname "$loadFile")" ] || mkdir -p "$(dirname "$loadFile")"
-
-    echo '{
-  "values": [' > "$loadFile"
-    echo "$values" | sed "$(echo "$values" | wc -l)s/,\$//" >> "$loadFile"
-    echo '  ]
-}' >> "$loadFile"
-
-    echo "- file '${loadFile}'"
-  else
-    [ -f "$loadFile" ] && rm "$loadFile"
-  fi
-}
-
 markdownBreadcrumbs() {
   local package="$1"
   local funcName="$2"
+
+  local docsDir="$(dirDocs "$package")"
+  local docFile="${docsDir}/${funcName}.md"
 
   local numBreadcrumbs=$(( $(grep -o '/' <<< "$funcName" | wc -l) + 2 ))
 
@@ -371,7 +403,7 @@ markdownBreadcrumbs() {
     else
       printf '[%s](%s) > '\
         "$(cut -d '/' -f "$i" <<< "${package}/${funcName}")"\
-        "$(realpath "docs/$(cut -d '/' -f "-${i}" <<< "${package}/${funcName}").md" --relative-to "$(dirname "$docFile")")"
+        "$(realpath "${docsDir}$(cut -d '/' -f "-${i}" <<< "/${funcName}").md" --relative-to "$(dirname "$docFile")")"
     fi
   done
 }
@@ -432,9 +464,15 @@ echo "Building $(basename "$(pwd)")..."
 while read package
 do
   echo "- package '${package}'"
-  makeDocs "$package"
-  makeInitFile "$package"
-  makeTestFiles "$package"
+
+  files="$(sort <<< "$(
+    makeDocs "$package" &
+    makeInitFile "$package" &
+    makeTestFiles "$package" &
+    wait
+  )")"
+
+  [ "$files" ] && echo "$files"
 done <<< "$(ls data | sed 's/^_//' | sort -u)"
 
 makeLoadFile
