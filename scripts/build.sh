@@ -142,7 +142,7 @@ $(
   do
     formatting="*$([ -f "data/${package}/functions/$(realpath "${directory}/${funcName}" --relative-to "docs/${package}").mcfunction" ] && echo '*')"
 
-    sed "s#[^/]*/#  #g;s#\([^ ]*\)\$#- [${formatting}\1${formatting}]\($(realpath "docs/${package}/${funcName}.md" --relative-to "$(dirname "$indexFile")")\)#" <<< "$funcName"
+    sed "s#[^/]*/#  #g;s#\([^ ]*\)\$#- [${formatting}\1${formatting}]\($(realpath "${directory}/${funcName}.md" --relative-to "$(dirname "$indexFile")")\)#" <<< "$funcName"
   done <<< "$(find "$directory" -name '*.md' | sed "s#^${directory}/##;s/\.md\$//" | sort -u)"
 )" >> "$indexFile"
 

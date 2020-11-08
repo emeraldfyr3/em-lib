@@ -4,5 +4,5 @@
 
 ## Functions
 
-- [**start**](start.md)
-- [**stop**](stop.md)
+- [**start**](scorebar/start.md)
+- [**stop**](scorebar/stop.md)
