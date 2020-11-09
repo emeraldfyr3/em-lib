@@ -8,6 +8,8 @@ Maximum range size (upper - lower) is 2147483647.
 
 Credit to Cloud Wolf for initial LCG implementation
 
+For "true" random numbers but slower performance, use `em:math/random`. For a guaranteed uniform distribution but even slower performance, use `em:math/randomu`.
+
 ## Parameters
 
 | Objective | Player/Selector | Comment     |

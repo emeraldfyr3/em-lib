@@ -1,5 +1,6 @@
-#!doc "Truly" random number generator with uniform distribution.
+#!doc "Truly" random number generator with uniform distribution for all ranges. "True" random means that the number is derived from Minecraft's randomness.
 #!doc Maximum range size (upper - lower) is 2147483647.
+#!doc For faster performance, use `em:math/random`. For even faster performance, use `em:math/randomp`.
 
 #!param em math_in1 Lower bound
 #!param em math_in2 Upper bound

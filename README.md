@@ -6,11 +6,9 @@
 Download the release for your Minecraft version here: https://github.com/emeraldfyr3/em-lib/releases
 
 ## Functions
-- math
-  - random: Generate a random integer in "math_out" on objective "em" between the scores in "math_in1" and "math_in2".
-  - randomp: Like random, but faster. Uses its own pseudorandom number algorithm instead of Minecraft's randomness.
-  - randomu: Like random, but with a completely uniform distribution. Performance is slower.
-- scorebar: Synchronize a boss bar with a player score
-  - start: Start syncing boss bar em:scorebar with player "scorebar" on ebjective "em". Copy whatever score you want to sync with the bar into that objective and it will update the bar automatically.
-  - stop: Stop syncing the boss bar
+- math: Collection of mathematical functions, including random number generation, power, and root functions
+- scorebar: Synchronize a bossbar's value with a player's score
 - scoretp: Teleport to coordinates in scoreboard values
+
+## Documentation & API Reference
+Read the documentation for all functions [here](docs/em.md).

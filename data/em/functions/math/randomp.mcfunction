@@ -1,6 +1,7 @@
 #!doc Pseudorandom number generator. Distribution is approximately uniform for small numbers.
 #!doc Maximum range size (upper - lower) is 2147483647.
 #!doc Credit to Cloud Wolf for initial LCG implementation
+#!doc For "true" random numbers but slower performance, use `em:math/random`. For a guaranteed uniform distribution but even slower performance, use `em:math/randomu`.
 
 #!param em math_in1 Lower bound
 #!param em math_in2 Upper bound

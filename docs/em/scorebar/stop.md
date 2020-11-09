@@ -2,4 +2,6 @@
 
 # em:scorebar/stop
 
-Stop synchronizing score for player "scorebar" on objective "em" with bossbar "em:scorebar"
+Stop syncing boss bar `em:scorebar` with player "scorebar" on ebjective "em".
+
+To start syncing, run `em:scorebar/start`.

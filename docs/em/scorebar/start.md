@@ -2,4 +2,6 @@
 
 # em:scorebar/start
 
-Start synchronizing score for player "scorebar" on objective "em" with bossbar "em:scorebar"
+Start syncing boss bar `em:scorebar` with player "scorebar" on ebjective "em". Copy whatever score you want to sync with the bar into that objective and it will update the bar automatically.
+
+To stop syncing, run `em:scorebar/stop`.
