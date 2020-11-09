@@ -15,3 +15,9 @@ To use the coordinates as absolute, use execute to position the command at 0,0,0
 | scoretp_x | @s              | relative x coordinate |
 | scoretp_y | @s              | relative y coordinate |
 | scoretp_z | @s              | relative z coordinate |
+
+## Video
+
+### How to Teleport to Scoreboard Values (Minecraft 1.16) 
+
+[![YouTube video for em:scoretp](https://i3.ytimg.com/vi/OINJSgKWQpg/maxresdefault.jpg)](https://www.youtube.com/watch?v=OINJSgKWQpg)

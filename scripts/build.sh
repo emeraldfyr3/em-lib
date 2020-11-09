@@ -21,6 +21,7 @@
 # #!doc <comment>                           # Doc comment for the function
 # #!param <objective> <selector> [comment]  # Function takes input from a score value for <selector> on <objective>
 # #!return <objective> <selector> [comment] # Function sets output to a score value for <selector> on <objective>
+# #!video <URL> [title]                     # Link to a video for the function
 
 dir_docs() {
   local package="$1"
@@ -78,6 +79,10 @@ makeDocs() {
   local docComments=
   local params=
   local returns=
+  local videos=
+
+  local videoUrl=
+  local videoTitle=
 
   [ -d "$docsDir" ] && rm -rf "$docsDir"
   [ -d "$helpDir" ] && rm -rf "$helpDir"
@@ -107,6 +112,9 @@ makeDocs() {
             '#!return '*)
               returns="${returns}${line#* }"$'\n'
               ;;
+            '#!video '*)
+              videos="${videos}${line#* }"$'\n'
+              ;;
           esac
         done < "$file"
 
@@ -114,6 +122,7 @@ makeDocs() {
         docComments="$(awk 'NF' <<< "$docComments")"
         params="$(awk 'NF' <<< "$params")"
         returns="$(awk 'NF' <<< "$returns")"
+        videos="$(awk 'NF' <<< "$videos")"
 
         [ -d "$(dirname "$docFile")" ] || mkdir -p "$(dirname "$docFile")"
         [ -d "$(dirname "$helpFile")" ] || mkdir -p "$(dirname "$helpFile")"
@@ -138,6 +147,25 @@ $(markdownBreadcrumbs "$package" "$funcName")
         then
           printf '\n## Returns\n\n' >> "$docFile"
           markdownTable 3 $'Objective Player/Selector Comment\n'"$returns" >> "$docFile"
+        fi
+
+        if [ "$videos" ]
+        then
+          printf "\n## Video$([ $(wc -l <<< "$videos") -gt 1 ] && echo 's')\n" >> "$docFile"
+          while read video
+          do
+            videoUrl="$(cut -d ' ' -f 1 <<< "${video} ")"
+            videoTitle="$(cut -d ' ' -f 2- <<< "${video} ")"
+
+            [ "$videoTitle" ] && printf "\n### ${videoTitle}\n" >> "$docFile"
+
+            if [[ "$videoUrl" = *//*.youtube.com/watch?v=* ]]
+            then
+              printf "\n[![YouTube video for ${package}:${funcName}](https://i3.ytimg.com/vi/$(sed 's/^.*?v=//;s/[&#].*//' <<< "$videoUrl")/maxresdefault.jpg)](${videoUrl})\n" >> "$docFile"
+            else
+              printf "\n[${videoUrl}](${videoUrl})\n" >> "$docFile"
+            fi
+          done <<< "$videos"
         fi
 
         echo "  - file '${docFile}'"

@@ -3,6 +3,8 @@
 #!doc Credit to Cloud Wolf for initial LCG implementation
 #!doc For "true" random numbers but slower performance, use `em:math/random`. For a guaranteed uniform distribution but even slower performance, use `em:math/randomu`.
 
+#!video https://www.youtube.com/watch?v=LNFgu_qithk 3 Random Number Generator Functions for Minecraft Java 1.16
+
 #!param em math_in1 Lower bound
 #!param em math_in2 Upper bound
 

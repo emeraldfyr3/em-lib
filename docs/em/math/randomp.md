@@ -22,3 +22,9 @@ For "true" random numbers but slower performance, use `em:math/random`. For a gu
 | Objective | Player/Selector | Comment                                        |
 | --------- | --------------- | ---------------------------------------------- |
 | em        | math_out        | Random integer within the range [lower, upper) |
+
+## Video
+
+### 3 Random Number Generator Functions for Minecraft Java 1.16 
+
+[![YouTube video for em:math/randomp](https://i3.ytimg.com/vi/LNFgu_qithk/maxresdefault.jpg)](https://www.youtube.com/watch?v=LNFgu_qithk)

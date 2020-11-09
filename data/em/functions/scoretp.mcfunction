@@ -6,6 +6,8 @@
 #!param scoretp_y @s relative y coordinate
 #!param scoretp_z @s relative z coordinate
 
+#!video https://www.youtube.com/watch?v=OINJSgKWQpg How to Teleport to Scoreboard Values (Minecraft 1.16)
+
 #!objective scoretp_x
 #!objective scoretp_y
 #!objective scoretp_z

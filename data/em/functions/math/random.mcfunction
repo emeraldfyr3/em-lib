@@ -2,6 +2,8 @@
 #!doc Maximum range size (upper - lower) is 2147483647.
 #!doc For faster performance, use `em:math/randomp`. For a guaranteed uniform distribution but slower performance, use `em:math/randomu`.
 
+#!video https://www.youtube.com/watch?v=LNFgu_qithk 3 Random Number Generator Functions for Minecraft Java 1.16
+
 #!param em math_in1 Lower bound
 #!param em math_in2 Upper bound
 

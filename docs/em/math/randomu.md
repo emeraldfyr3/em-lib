@@ -20,3 +20,9 @@ For faster performance, use `em:math/random`. For even faster performance, use `
 | Objective | Player/Selector | Comment                                        |
 | --------- | --------------- | ---------------------------------------------- |
 | em        | math_out        | Random integer within the range [lower, upper) |
+
+## Video
+
+### 3 Random Number Generator Functions for Minecraft Java 1.16 
+
+[![YouTube video for em:math/randomu](https://i3.ytimg.com/vi/LNFgu_qithk/maxresdefault.jpg)](https://www.youtube.com/watch?v=LNFgu_qithk)
