@@ -11,4 +11,4 @@ Download the release for your Minecraft version here: https://github.com/emerald
 - scoretp: Teleport to coordinates in scoreboard values
 
 ## Documentation & API Reference
-Read the documentation for all functions [here](docs/em.md).
+[Read the documentation for all functions here.](docs/em.md)
