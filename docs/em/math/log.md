@@ -6,13 +6,13 @@ Find the logarithm of a number in the given base
 
 ## Parameters
 
-| Objective | Player/Selector | Comment |
-| --------- | --------------- | ------- |
-| em        | math_in1        | base    |
-| em        | math_in2        | number  |
+| Objective | Player/Selector | Description |
+| --------- | --------------- | ----------- |
+| em        | math_in1        | base        |
+| em        | math_in2        | number      |
 
 ## Returns
 
-| Objective | Player/Selector | Comment                     |
+| Objective | Player/Selector | Description                 |
 | --------- | --------------- | --------------------------- |
 | em        | math_out        | logarithm of number in base |

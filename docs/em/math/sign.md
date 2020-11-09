@@ -6,12 +6,12 @@ Get the sign of a number
 
 ## Parameters
 
-| Objective | Player/Selector | Comment |
-| --------- | --------------- | ------- |
-| em        | math_in1        | number  |
+| Objective | Player/Selector | Description |
+| --------- | --------------- | ----------- |
+| em        | math_in1        | number      |
 
 ## Returns
 
-| Objective | Player/Selector | Comment                                                                   |
+| Objective | Player/Selector | Description                                                               |
 | --------- | --------------- | ------------------------------------------------------------------------- |
 | em        | math_out        | sign: -1 if number is negative, 0 if number is 0, 1 if number is positive |

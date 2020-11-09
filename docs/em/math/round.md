@@ -6,13 +6,13 @@ Round a number to the nearest multiple of another number
 
 ## Parameters
 
-| Objective | Player/Selector | Comment         |
+| Objective | Player/Selector | Description     |
 | --------- | --------------- | --------------- |
 | em        | math_in1        | number to round |
 | em        | math_in2        | factor          |
 
 ## Returns
 
-| Objective | Player/Selector | Comment        |
+| Objective | Player/Selector | Description    |
 | --------- | --------------- | -------------- |
 | em        | math_out        | rounded number |

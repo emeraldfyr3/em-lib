@@ -140,13 +140,13 @@ $(markdownBreadcrumbs "$package" "$funcName")
         if [ "$params" ]
         then
           printf '\n## Parameters\n\n' >> "$docFile"
-          markdownTable 3 $'Objective Player/Selector Comment\n'"$params" >> "$docFile"
+          markdownTable 3 $'Objective Player/Selector Description\n'"$params" >> "$docFile"
         fi
 
         if [ "$returns" ]
         then
           printf '\n## Returns\n\n' >> "$docFile"
-          markdownTable 3 $'Objective Player/Selector Comment\n'"$returns" >> "$docFile"
+          markdownTable 3 $'Objective Player/Selector Description\n'"$returns" >> "$docFile"
         fi
 
         if [ "$videos" ]

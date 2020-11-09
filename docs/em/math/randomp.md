@@ -12,14 +12,14 @@ For "true" random numbers but slower performance, use `em:math/random`. For a gu
 
 ## Parameters
 
-| Objective | Player/Selector | Comment     |
+| Objective | Player/Selector | Description |
 | --------- | --------------- | ----------- |
 | em        | math_in1        | Lower bound |
 | em        | math_in2        | Upper bound |
 
 ## Returns
 
-| Objective | Player/Selector | Comment                                        |
+| Objective | Player/Selector | Description                                    |
 | --------- | --------------- | ---------------------------------------------- |
 | em        | math_out        | Random integer within the range [lower, upper) |
 

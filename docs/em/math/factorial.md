@@ -6,12 +6,12 @@ Calculate the factorial of a number
 
 ## Parameters
 
-| Objective | Player/Selector | Comment |
-| --------- | --------------- | ------- |
-| em        | math_in1        | number  |
+| Objective | Player/Selector | Description |
+| --------- | --------------- | ----------- |
+| em        | math_in1        | number      |
 
 ## Returns
 
-| Objective | Player/Selector | Comment   |
-| --------- | --------------- | --------- |
-| em        | math_out        | factorial |
+| Objective | Player/Selector | Description |
+| --------- | --------------- | ----------- |
+| em        | math_out        | factorial   |

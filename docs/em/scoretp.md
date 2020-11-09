@@ -10,7 +10,7 @@ To use the coordinates as absolute, use execute to position the command at 0,0,0
 
 ## Parameters
 
-| Objective | Player/Selector | Comment               |
+| Objective | Player/Selector | Description           |
 | --------- | --------------- | --------------------- |
 | scoretp_x | @s              | relative x coordinate |
 | scoretp_y | @s              | relative y coordinate |

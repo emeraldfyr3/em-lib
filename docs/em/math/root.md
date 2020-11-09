@@ -8,13 +8,13 @@ https://en.wikipedia.org/wiki/Newton%27s_method#Square_root
 
 ## Parameters
 
-| Objective | Player/Selector | Comment     |
+| Objective | Player/Selector | Description |
 | --------- | --------------- | ----------- |
 | em        | math_in1        | root degree |
 | em        | math_in2        | number      |
 
 ## Returns
 
-| Objective | Player/Selector | Comment            |
+| Objective | Player/Selector | Description        |
 | --------- | --------------- | ------------------ |
 | em        | math_out        | nth root of number |
