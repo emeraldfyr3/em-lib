@@ -2,6 +2,8 @@
 
 # em:math/randomp
 
+> Source: [data/em/functions/math/randomp.mcfunction](../../../data/em/functions/math/randomp.mcfunction)
+
 Pseudorandom number generator. Distribution is approximately uniform for small numbers.
 
 Maximum range size (upper - lower) is 2147483647.

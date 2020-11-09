@@ -2,6 +2,8 @@
 
 # em:math/randomu
 
+> Source: [data/em/functions/math/randomu.mcfunction](../../../data/em/functions/math/randomu.mcfunction)
+
 "Truly" random number generator with uniform distribution for all ranges. "True" random means that the number is derived from Minecraft's randomness.
 
 Maximum range size (upper - lower) is 2147483647.

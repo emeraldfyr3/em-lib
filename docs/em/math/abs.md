@@ -2,6 +2,8 @@
 
 # em:math/abs
 
+> Source: [data/em/functions/math/abs.mcfunction](../../../data/em/functions/math/abs.mcfunction)
+
 Get the absolute value of a number
 
 ## Parameters

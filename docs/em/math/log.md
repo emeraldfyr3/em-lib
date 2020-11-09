@@ -2,6 +2,8 @@
 
 # em:math/log
 
+> Source: [data/em/functions/math/log.mcfunction](../../../data/em/functions/math/log.mcfunction)
+
 Find the logarithm of a number in the given base
 
 ## Parameters

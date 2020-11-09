@@ -2,6 +2,8 @@
 
 # em:math/random
 
+> Source: [data/em/functions/math/random.mcfunction](../../../data/em/functions/math/random.mcfunction)
+
 "Truly" random number generator. Distribution is approximately uniform for small numbers. "True" random means that the number is derived from Minecraft's randomness.
 
 Maximum range size (upper - lower) is 2147483647.

@@ -2,6 +2,8 @@
 
 # em:math/power
 
+> Source: [data/em/functions/math/power.mcfunction](../../../data/em/functions/math/power.mcfunction)
+
 Raise a number to a power
 
 ## Parameters

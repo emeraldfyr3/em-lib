@@ -2,6 +2,8 @@
 
 # em:math/root
 
+> Source: [data/em/functions/math/root.mcfunction](../../../data/em/functions/math/root.mcfunction)
+
 Find the nth root of a number using Newton's Method for root approximation
 
 https://en.wikipedia.org/wiki/Newton%27s_method#Square_root

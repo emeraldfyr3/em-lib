@@ -2,6 +2,8 @@
 
 # em:math/factorial
 
+> Source: [data/em/functions/math/factorial.mcfunction](../../../data/em/functions/math/factorial.mcfunction)
+
 Calculate the factorial of a number
 
 ## Parameters

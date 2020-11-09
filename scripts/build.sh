@@ -130,7 +130,9 @@ makeDocs() {
         echo "\
 $(markdownBreadcrumbs "$package" "$funcName")
 
-# ${package}:${funcName}" > "$docFile"
+# ${package}:${funcName}
+
+> Source: [${file}]($(realpath "$file" --relative-to "$(dirname "$docFile")"))" > "$docFile"
 
         if [ "$docComments" ]
         then

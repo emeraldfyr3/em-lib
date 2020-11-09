@@ -2,6 +2,8 @@
 
 # em:math/divide_round
 
+> Source: [data/em/functions/math/divide_round.mcfunction](../../../data/em/functions/math/divide_round.mcfunction)
+
 Divide two numbers and round the result to the nearest integer
 
 ## Parameters

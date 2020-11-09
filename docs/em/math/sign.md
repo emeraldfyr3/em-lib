@@ -2,6 +2,8 @@
 
 # em:math/sign
 
+> Source: [data/em/functions/math/sign.mcfunction](../../../data/em/functions/math/sign.mcfunction)
+
 Get the sign of a number
 
 ## Parameters
