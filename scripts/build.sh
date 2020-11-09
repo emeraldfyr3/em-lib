@@ -139,13 +139,13 @@ $(markdownBreadcrumbs "$package" "$funcName")
 
         if [ "$params" ]
         then
-          printf '\n## Parameters\n\n' >> "$docFile"
+          printf '\n## Parameters\n\nSet these scoreboard values to pass in arguments to the function.\n\n' >> "$docFile"
           markdownTable 3 $'Objective Player/Selector Description\n'"$params" >> "$docFile"
         fi
 
         if [ "$returns" ]
         then
-          printf '\n## Returns\n\n' >> "$docFile"
+          printf "\n## Returns\n\nThe function's output will be saved to these scoreboard values.\n\n" >> "$docFile"
           markdownTable 3 $'Objective Player/Selector Description\n'"$returns" >> "$docFile"
         fi
 

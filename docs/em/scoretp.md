@@ -10,6 +10,8 @@ To use the coordinates as absolute, use execute to position the command at 0,0,0
 
 ## Parameters
 
+Set these scoreboard values to pass in arguments to the function.
+
 | Objective | Player/Selector | Description           |
 | --------- | --------------- | --------------------- |
 | scoretp_x | @s              | relative x coordinate |
