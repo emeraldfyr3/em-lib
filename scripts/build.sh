@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# Script to generate initialization functions and add to minecraft:load tag
+# Script to generate initialization functions and add to minecraft:load tag.
+# Also generates documentation and creates a test function to run all tests.
 #
 # One _init.mcfunction is generated per package.
 # A package includes public and private namespaces.
@@ -15,6 +16,11 @@
 # #!objective <name> [type] [displayname]  # Create a scoreboard objective. Default type is dummy, default displayname is the name.
 # #!reset <function>                       # Run another function on reset.
 # #!score <player> <objective> [value]     # Set a player's score, or reset the score if no value is given.
+#
+# Documentation is generated using these compiler directives:
+# #!doc <comment>                           # Doc comment for the function
+# #!param <objective> <selector> [comment]  # Function takes input from a score value for <selector> on <objective>
+# #!return <objective> <selector> [comment] # Function sets output to a score value for <selector> on <objective>
 
 dir_docs() {
   local package="$1"
