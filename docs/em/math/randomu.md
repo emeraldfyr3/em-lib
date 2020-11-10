@@ -29,6 +29,6 @@ The function's output will be saved to these scoreboard values.
 
 ## Video
 
-### 3 Random Number Generator Functions for Minecraft Java 1.16 
+### 3 Random Number Generator Functions for Minecraft Java 1.16
 
 [![YouTube video for em:math/randomu](https://i3.ytimg.com/vi/LNFgu_qithk/maxresdefault.jpg)](https://www.youtube.com/watch?v=LNFgu_qithk)

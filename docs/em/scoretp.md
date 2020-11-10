@@ -22,6 +22,6 @@ Set these scoreboard values to pass in arguments to the function.
 
 ## Video
 
-### How to Teleport to Scoreboard Values (Minecraft 1.16) 
+### How to Teleport to Scoreboard Values (Minecraft 1.16)
 
 [![YouTube video for em:scoretp](https://i3.ytimg.com/vi/OINJSgKWQpg/maxresdefault.jpg)](https://www.youtube.com/watch?v=OINJSgKWQpg)

@@ -156,8 +156,8 @@ $(markdownBreadcrumbs "$package" "$funcName")
           printf "\n## Video$([ $(wc -l <<< "$videos") -gt 1 ] && echo 's')\n" >> "$docFile"
           while read video
           do
-            videoUrl="$(cut -d ' ' -f 1 <<< "${video} ")"
-            videoTitle="$(cut -d ' ' -f 2- <<< "${video} ")"
+            videoUrl="$(cut -d ' ' -f 1 <<< "${video}")"
+            videoTitle="$(cut -sd ' ' -f 2- <<< "${video}")"
 
             [ "$videoTitle" ] && printf "\n### ${videoTitle}\n" >> "$docFile"
 
@@ -295,12 +295,12 @@ $([ "$objectives" ] && echo "
 $(
   while read objective
   do
-    name="$(echo "${objective} " | cut -d ' ' -f 1)"
-    type="$(echo "${objective} " | cut -d ' ' -f 2)"
+    name="$(cut -d ' ' -f 1 <<< "$objective")"
+    type="$(cut -sd ' ' -f 2 <<< "$objective")"
     [ "$type" ] || type='dummy'
 
     echo "scoreboard objectives add ${name} ${type}"
-  done <<< "$(echo "$objectives" | sort -u)"
+  done <<< "$(sort -u <<< "$objectives")"
 )
 ")\
 $([ "$constants" ] && echo "
@@ -309,11 +309,11 @@ $([ "$constants" ] && echo "
 $(
   while read constant
   do
-    value="$(echo "${constant} " | cut -d ' ' -f 1)"
-    objective="$(echo "${constant} " | cut -d ' ' -f 2)"
+    value="$(cut -d ' ' -f 1 <<< "$constant")"
+    objective="$(cut -sd ' ' -f 2 <<< "$constant")"
 
     echo "scoreboard players set #${value} ${objective} ${value}"
-  done <<< "$(echo "$constants" | sort -u)"
+  done <<< "$(sort -u <<< "$constants")"
 )
 ")\
 $([ "$scores" ] && echo "
@@ -322,9 +322,9 @@ $([ "$scores" ] && echo "
 $(
   while read score
   do
-    player="$(echo "${score} " | cut -d ' ' -f 1)"
-    objective="$(echo "${score} " | cut -d ' ' -f 2)"
-    value="$(echo "${score} " | cut -d ' ' -f 3)"
+    player="$(cut -d ' ' -f 1 <<< "$score")"
+    objective="$(cut -sd ' ' -f 2 <<< "$score")"
+    value="$(cut -sd ' ' -f 3 <<< "$score")"
 
     if [ "$value" ]
     then
@@ -332,7 +332,7 @@ $(
     else
       echo "scoreboard players reset ${player} ${objective}"
     fi
-  done <<< "$(echo "$scores" | sort -u)"
+  done <<< "$(sort -u <<< "$scores")"
 )
 ")\
 $([ "$bossbars" ] && echo "
@@ -341,12 +341,12 @@ $([ "$bossbars" ] && echo "
 $(
   while read bossbar
   do
-    id="$(echo "${bossbar} " | cut -d ' ' -f 1)"
-    name="$(echo "${bossbar} " | cut -d ' ' -f 2)"
+    id="$(cut -d ' ' -f 1 <<< "$bossbar")"
+    name="$(cut -sd ' ' -f 2 <<< "$bossbar")"
     [ "$name" ] || name='""'
 
     echo "bossbar add ${id} ${name}"
-  done <<< "$(echo "$bossbars" | sort -u)"
+  done <<< "$(sort -u <<< "$bossbars")"
 )
 ")\
 $([ "$inits" ] && echo "
@@ -355,10 +355,10 @@ $([ "$inits" ] && echo "
 $(
   while read init
   do
-    function="$(echo "${init} " | cut -d ' ' -f 1)"
+    function="$(cut -d ' ' -f 1 <<< "$init")"
 
     echo "function ${function}"
-  done <<< "$(echo "$inits" | sort -u)"
+  done <<< "$(sort -u <<< "$inits")"
 )
 ")\
 " > "$initFile"
@@ -379,10 +379,10 @@ $([ "$objectives" ] && echo "
 $(
   while read objective
   do
-    name="$(echo "${objective} " | cut -d ' ' -f 1)"
+    name="$(cut -d ' ' -f 1 <<< "$objective")"
 
     echo "scoreboard objectives remove ${name}"
-  done <<< "$(echo "$objectives" | sort -u)"
+  done <<< "$(sort -u <<< "$objectives")"
 )
 ")\
 $([ "$bossbars" ] && echo "
@@ -391,10 +391,10 @@ $([ "$bossbars" ] && echo "
 $(
   while read bossbar
   do
-    id="$(echo "${bossbar} " | cut -d ' ' -f 1)"
+    id="$(cut -d ' ' -f 1 <<< "$bossbar")"
 
     echo "bossbar remove ${id}"
-  done <<< "$(echo "$bossbars" | sort -u)"
+  done <<< "$(sort -u <<< "$bossbars")"
 )
 ")\
 $([ "$resets" ] && echo "
@@ -403,10 +403,10 @@ $([ "$resets" ] && echo "
 $(
   while read reset
   do
-    function="$(echo "${reset} " | cut -d ' ' -f 1)"
+    function="$(cut -d ' ' -f 1 <<< "$reset")"
 
     echo "function ${function}"
-  done <<< "$(echo "$resets" | sort -u)"
+  done <<< "$(sort -u <<< "$resets")"
 )
 ")\
 " > "$resetFile"
