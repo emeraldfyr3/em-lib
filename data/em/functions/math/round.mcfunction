@@ -1,9 +1,9 @@
 #!doc Round a number to the nearest multiple of another number
 
-#!param em math_in1 number to round
-#!param em math_in2 factor
+#!param math_in1 em number to round
+#!param math_in2 em factor
 
-#!return em math_out rounded number
+#!return math_out em rounded number
 
 #!objective em
 

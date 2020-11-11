@@ -5,10 +5,10 @@
 
 #!video https://www.youtube.com/watch?v=LNFgu_qithk 3 Random Number Generator Functions for Minecraft Java 1.16
 
-#!param em math_in1 Lower bound
-#!param em math_in2 Upper bound
+#!param math_in1 em Lower bound
+#!param math_in2 em Upper bound
 
-#!return em math_out Random integer within the range [lower, upper)
+#!return math_out em Random integer within the range [lower, upper)
 
 #!objective em
 

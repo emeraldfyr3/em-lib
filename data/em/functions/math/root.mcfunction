@@ -1,10 +1,10 @@
 #!doc Find the nth root of a number using Newton's Method for root approximation
 #!doc https://en.wikipedia.org/wiki/Newton%27s_method#Square_root
 
-#!param em math_in1 root degree
-#!param em math_in2 number
+#!param math_in1 em root degree
+#!param math_in2 em number
 
-#!return em math_out nth root of number
+#!return math_out em nth root of number
 
 #!objective em
 

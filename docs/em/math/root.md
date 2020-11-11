@@ -12,15 +12,15 @@ https://en.wikipedia.org/wiki/Newton%27s_method#Square_root
 
 Set these scoreboard values to pass in arguments to the function.
 
-| Objective | Player/Selector | Description |
-| --------- | --------------- | ----------- |
-| em        | math_in1        | root degree |
-| em        | math_in2        | number      |
+| Player/Selector | Objective | Description |
+| --------------- | --------- | ----------- |
+| math_in1        | em        | root degree |
+| math_in2        | em        | number      |
 
 ## Returns
 
 The function's output will be saved to these scoreboard values.
 
-| Objective | Player/Selector | Description        |
-| --------- | --------------- | ------------------ |
-| em        | math_out        | nth root of number |
+| Player/Selector | Objective | Description        |
+| --------------- | --------- | ------------------ |
+| math_out        | em        | nth root of number |

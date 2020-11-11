@@ -1,9 +1,9 @@
 #!doc Raise a number to a power
 
-#!param em math_in1 base
-#!param em math_in2 exponent
+#!param math_in1 em base
+#!param math_in2 em exponent
 
-#!return em math_out base to the power of exponent
+#!return math_out em base to the power of exponent
 
 #!objective em
 

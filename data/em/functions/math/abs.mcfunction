@@ -1,8 +1,8 @@
 #!doc Get the absolute value of a number
 
-#!param em math_in1 number
+#!param math_in1 em number
 
-#!return em math_out absolute value of number
+#!return math_out em absolute value of number
 
 #!objective em
 

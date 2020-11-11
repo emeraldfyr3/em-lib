@@ -14,11 +14,11 @@ To use the coordinates as absolute, use execute to position the command at 0,0,0
 
 Set these scoreboard values to pass in arguments to the function.
 
-| Objective | Player/Selector | Description           |
-| --------- | --------------- | --------------------- |
-| scoretp_x | @s              | relative x coordinate |
-| scoretp_y | @s              | relative y coordinate |
-| scoretp_z | @s              | relative z coordinate |
+| Player/Selector | Objective | Description           |
+| --------------- | --------- | --------------------- |
+| @s              | scoretp_x | relative x coordinate |
+| @s              | scoretp_y | relative y coordinate |
+| @s              | scoretp_z | relative z coordinate |
 
 ## Video
 

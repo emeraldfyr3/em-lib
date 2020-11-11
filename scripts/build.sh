@@ -19,8 +19,8 @@
 #
 # Documentation is generated using these compiler directives:
 # #!doc <comment>                           # Doc comment for the function
-# #!param <objective> <selector> [comment]  # Function takes input from a score value for <selector> on <objective>
-# #!return <objective> <selector> [comment] # Function sets output to a score value for <selector> on <objective>
+# #!param <selector> <objective> [comment]  # Function takes input from a score value for <selector> on <objective>
+# #!return <selector> <objective> [comment] # Function sets output to a score value for <selector> on <objective>
 # #!video <URL> [title]                     # Link to a video for the function
 
 dir_docs() {
@@ -81,6 +81,9 @@ makeDocs() {
   local returns=
   local videos=
 
+  local player=
+  local objective=
+  local description=
   local videoUrl=
   local videoTitle=
 
@@ -134,26 +137,64 @@ $(markdownBreadcrumbs "$package" "$funcName")
 
 > Source: [${file}]($(realpath "$file" --relative-to "$(dirname "$docFile")"))" > "$docFile"
 
+        printf 'tellraw @s [""' > "$helpFile"
+        printf ',{"text":"%s","bold":true,"color":"yellow"}' "${package}:${funcName}" >> "$helpFile"
+
         if [ "$docComments" ]
         then
           sed $'s/^/\\\n/' <<< "$docComments" >> "$docFile"
+          sed 's/^/,{"text":"\\\n/;s/$/"}/' <<< "$docComments" | tr -d '\n' >> "$helpFile"
         fi
 
         if [ "$params" ]
         then
           printf '\n## Parameters\n\nSet these scoreboard values to pass in arguments to the function.\n\n' >> "$docFile"
-          markdownTable 3 $'Objective Player/Selector Description\n'"$params" >> "$docFile"
+          markdownTable 3 $'Player/Selector Objective Description\n'"$params" >> "$docFile"
+
+          printf ',{"text":"\\n\\nParameters","bold":true}' >> "$helpFile"
+
+          while read param
+          do
+            player="$(cut -d ' ' -f 1 <<< "$param")"
+            objective="$(cut -sd ' ' -f 2 <<< "$param")"
+            description="$(cut -sd ' ' -f 3- <<< "$param")"
+
+            printf ',{"text":"\\n["},{"text":"set","underlined":true,"color":"aqua","clickEvent":{"action":"suggest_command","value":"/scoreboard players set %s %s "}},{"text":"] "},{"text":"%s","color":"gold"},{"text":" | "},{"text":"%s","color":"green"}'\
+              "$player"\
+              "$objective"\
+              "$player"\
+              "$objective" >> "$helpFile"
+
+            [ "$description" ] && printf ',{"text":" | %s"}' "$description" >> "$helpFile"
+          done <<< "$params"
         fi
 
         if [ "$returns" ]
         then
           printf "\n## Returns\n\nThe function's output will be saved to these scoreboard values.\n\n" >> "$docFile"
-          markdownTable 3 $'Objective Player/Selector Description\n'"$returns" >> "$docFile"
+          markdownTable 3 $'Player/Selector Objective Description\n'"$returns" >> "$docFile"
+
+          printf ',{"text":"\\n\\nReturns","bold":true}' >> "$helpFile"
+
+          while read return
+          do
+            player="$(cut -d ' ' -f 1 <<< "$return")"
+            objective="$(cut -sd ' ' -f 2 <<< "$return")"
+            description="$(cut -sd ' ' -f 3- <<< "$return")"
+
+            printf ',{"text":"\\n%s","color":"gold"},{"text":" | "},{"text":"%s","color":"green"}'\
+              "$player"\
+              "$objective" >> "$helpFile"
+
+            [ "$description" ] && printf ',{"text":" | %s"}' "$description" >> "$helpFile"
+          done <<< "$returns"
         fi
 
         if [ "$videos" ]
         then
           printf "\n## Video$([ $(wc -l <<< "$videos") -gt 1 ] && echo 's')\n" >> "$docFile"
+          printf ',{"text":"\\n\\nVideo%s","bold":true}' "$([ $(wc -l <<< "$videos") -gt 1 ] && echo 's')" >> "$helpFile"
+
           while read video
           do
             videoUrl="$(cut -d ' ' -f 1 <<< "${video}")"
@@ -167,10 +208,17 @@ $(markdownBreadcrumbs "$package" "$funcName")
             else
               printf "\n[${videoUrl}](${videoUrl})\n" >> "$docFile"
             fi
+
+            printf ',{"text":"\\n%s","underlined":true,"color":"aqua","clickEvent":{"action":"open_url","value":"%s"}}'\
+              "$([ "$videoTitle" ] && echo "$videoTitle" || echo "$videoUrl")"\
+              "$videoUrl" >> "$helpFile"
           done <<< "$videos"
         fi
 
+        printf ']' >> "$helpFile"
+
         echo "  - file '${docFile}'"
+        echo "  - file '${helpFile}'"
       ) &
     done <<< "$(listFunctionFiles "$package")"
 
@@ -564,6 +612,25 @@ markdownTable() {
       headerPrinted='true'
     fi
   done <<< "$content"
+}
+
+tellrawBreadcrumbs() {
+  local package="$1"
+  local funcName="$2"
+
+  local numBreadcrumbs=$(( $(grep -o '/' <<< "$funcName" | wc -l) + 2 ))
+
+  for (( i=1; i<=$numBreadcrumbs; i++ ))
+  do
+    if [ $i -eq $numBreadcrumbs ]
+    then
+      printf ",{\"text\":\"$(cut -d '/' -f "$i" <<< "${package}/${funcName}")\\\n\\\n\"}"
+    else
+      printf ',{"text":"%s","underlined":true,"color":"aqua","clickEvent":{"action":"run_command","value":"/function %s"}},{"text":" > "}'\
+        "$(cut -d '/' -f "$i" <<< "${package}/${funcName}")"\
+        "$(cut -d '/' -f "-${i}" <<< "${package}:help/${funcName}")"
+    fi
+  done
 }
 
 ### Main ###

@@ -2,9 +2,9 @@
 #!doc The coordinates are relative to where the command is positioned. That means if an entity is at x=100 and scoretp_x=5, running `/execute as @e run function em:scoretp` will teleport the entity to x=105.
 #!doc To use the coordinates as absolute, use execute to position the command at 0,0,0. Example: `/execute positioned 0 0 0 run function em:scoretp`
 
-#!param scoretp_x @s relative x coordinate
-#!param scoretp_y @s relative y coordinate
-#!param scoretp_z @s relative z coordinate
+#!param @s scoretp_x relative x coordinate
+#!param @s scoretp_y relative y coordinate
+#!param @s scoretp_z relative z coordinate
 
 #!video https://www.youtube.com/watch?v=OINJSgKWQpg How to Teleport to Scoreboard Values (Minecraft 1.16)
 

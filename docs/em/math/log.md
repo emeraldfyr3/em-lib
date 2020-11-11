@@ -10,15 +10,15 @@ Find the logarithm of a number in the given base
 
 Set these scoreboard values to pass in arguments to the function.
 
-| Objective | Player/Selector | Description |
-| --------- | --------------- | ----------- |
-| em        | math_in1        | base        |
-| em        | math_in2        | number      |
+| Player/Selector | Objective | Description |
+| --------------- | --------- | ----------- |
+| math_in1        | em        | base        |
+| math_in2        | em        | number      |
 
 ## Returns
 
 The function's output will be saved to these scoreboard values.
 
-| Objective | Player/Selector | Description                 |
-| --------- | --------------- | --------------------------- |
-| em        | math_out        | logarithm of number in base |
+| Player/Selector | Objective | Description                 |
+| --------------- | --------- | --------------------------- |
+| math_out        | em        | logarithm of number in base |

@@ -10,14 +10,14 @@ Get the absolute value of a number
 
 Set these scoreboard values to pass in arguments to the function.
 
-| Objective | Player/Selector | Description |
-| --------- | --------------- | ----------- |
-| em        | math_in1        | number      |
+| Player/Selector | Objective | Description |
+| --------------- | --------- | ----------- |
+| math_in1        | em        | number      |
 
 ## Returns
 
 The function's output will be saved to these scoreboard values.
 
-| Objective | Player/Selector | Description              |
-| --------- | --------------- | ------------------------ |
-| em        | math_out        | absolute value of number |
+| Player/Selector | Objective | Description              |
+| --------------- | --------- | ------------------------ |
+| math_out        | em        | absolute value of number |

@@ -10,14 +10,14 @@ Calculate the factorial of a number
 
 Set these scoreboard values to pass in arguments to the function.
 
-| Objective | Player/Selector | Description |
-| --------- | --------------- | ----------- |
-| em        | math_in1        | number      |
+| Player/Selector | Objective | Description |
+| --------------- | --------- | ----------- |
+| math_in1        | em        | number      |
 
 ## Returns
 
 The function's output will be saved to these scoreboard values.
 
-| Objective | Player/Selector | Description |
-| --------- | --------------- | ----------- |
-| em        | math_out        | factorial   |
+| Player/Selector | Objective | Description |
+| --------------- | --------- | ----------- |
+| math_out        | em        | factorial   |

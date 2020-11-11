@@ -1,8 +1,8 @@
 #!doc Calculate the factorial of a number
 
-#!param em math_in1 number
+#!param math_in1 em number
 
-#!return em math_out factorial
+#!return math_out em factorial
 
 #!objective em
 

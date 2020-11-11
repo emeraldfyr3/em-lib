@@ -1,8 +1,8 @@
 #!doc Get the sign of a number
 
-#!param em math_in1 number
+#!param math_in1 em number
 
-#!return em math_out sign: -1 if number is negative, 0 if number is 0, 1 if number is positive
+#!return math_out em sign: -1 if number is negative, 0 if number is 0, 1 if number is positive
 
 #!objective em
 

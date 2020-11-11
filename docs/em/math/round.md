@@ -10,15 +10,15 @@ Round a number to the nearest multiple of another number
 
 Set these scoreboard values to pass in arguments to the function.
 
-| Objective | Player/Selector | Description     |
-| --------- | --------------- | --------------- |
-| em        | math_in1        | number to round |
-| em        | math_in2        | factor          |
+| Player/Selector | Objective | Description     |
+| --------------- | --------- | --------------- |
+| math_in1        | em        | number to round |
+| math_in2        | em        | factor          |
 
 ## Returns
 
 The function's output will be saved to these scoreboard values.
 
-| Objective | Player/Selector | Description    |
-| --------- | --------------- | -------------- |
-| em        | math_out        | rounded number |
+| Player/Selector | Objective | Description    |
+| --------------- | --------- | -------------- |
+| math_out        | em        | rounded number |

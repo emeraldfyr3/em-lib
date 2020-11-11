@@ -1,9 +1,9 @@
 #!doc Divide two numbers and round the result to the nearest integer
 
-#!param em math_in1 dividend
-#!param em math_in2 divisor
+#!param math_in1 em dividend
+#!param math_in2 em divisor
 
-#!return em math_out rounded quotient
+#!return math_out em rounded quotient
 
 #!objective em
 

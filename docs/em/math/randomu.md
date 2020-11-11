@@ -14,18 +14,18 @@ For faster performance, use `em:math/random`. For even faster performance, use `
 
 Set these scoreboard values to pass in arguments to the function.
 
-| Objective | Player/Selector | Description |
-| --------- | --------------- | ----------- |
-| em        | math_in1        | Lower bound |
-| em        | math_in2        | Upper bound |
+| Player/Selector | Objective | Description |
+| --------------- | --------- | ----------- |
+| math_in1        | em        | Lower bound |
+| math_in2        | em        | Upper bound |
 
 ## Returns
 
 The function's output will be saved to these scoreboard values.
 
-| Objective | Player/Selector | Description                                    |
-| --------- | --------------- | ---------------------------------------------- |
-| em        | math_out        | Random integer within the range [lower, upper) |
+| Player/Selector | Objective | Description                                    |
+| --------------- | --------- | ---------------------------------------------- |
+| math_out        | em        | Random integer within the range [lower, upper) |
 
 ## Video
 

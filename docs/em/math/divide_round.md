@@ -10,15 +10,15 @@ Divide two numbers and round the result to the nearest integer
 
 Set these scoreboard values to pass in arguments to the function.
 
-| Objective | Player/Selector | Description |
-| --------- | --------------- | ----------- |
-| em        | math_in1        | dividend    |
-| em        | math_in2        | divisor     |
+| Player/Selector | Objective | Description |
+| --------------- | --------- | ----------- |
+| math_in1        | em        | dividend    |
+| math_in2        | em        | divisor     |
 
 ## Returns
 
 The function's output will be saved to these scoreboard values.
 
-| Objective | Player/Selector | Description      |
-| --------- | --------------- | ---------------- |
-| em        | math_out        | rounded quotient |
+| Player/Selector | Objective | Description      |
+| --------------- | --------- | ---------------- |
+| math_out        | em        | rounded quotient |
