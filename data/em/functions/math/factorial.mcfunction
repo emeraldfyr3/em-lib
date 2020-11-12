@@ -4,6 +4,8 @@
 
 #!return math_out em factorial
 
+#!video https://www.youtube.com/watch?v=gDObl5lCF1w Math Functions for Minecraft Java 1.16
+
 #!objective em
 
 # The max factorial before overflowing is 12!, so it's more efficient to pre-calculate all the answers than to do recursion.

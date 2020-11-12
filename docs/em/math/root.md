@@ -24,3 +24,9 @@ The function's output will be saved to these scoreboard values.
 | Player/Selector | Objective | Description        |
 | --------------- | --------- | ------------------ |
 | math_out        | em        | nth root of number |
+
+## Video
+
+### Math Functions for Minecraft Java 1.16
+
+[![YouTube video for em:math/root](https://i3.ytimg.com/vi/gDObl5lCF1w/maxresdefault.jpg)](https://www.youtube.com/watch?v=gDObl5lCF1w)

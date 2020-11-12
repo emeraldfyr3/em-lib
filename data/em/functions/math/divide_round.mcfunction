@@ -5,6 +5,8 @@
 
 #!return math_out em rounded quotient
 
+#!video https://www.youtube.com/watch?v=gDObl5lCF1w Math Functions for Minecraft Java 1.16
+
 #!objective em
 
 # round(n / d) = floor(n / d + 0.5) = floor(n / d + 1 / 2) = floor((2n + d) / (2d))

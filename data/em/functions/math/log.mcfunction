@@ -5,6 +5,8 @@
 
 #!return math_out em logarithm of number in base
 
+#!video https://www.youtube.com/watch?v=gDObl5lCF1w Math Functions for Minecraft Java 1.16
+
 #!objective em
 
 execute store result score #math__log__var em run scoreboard players set math_out em 0

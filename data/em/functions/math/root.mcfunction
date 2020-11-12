@@ -6,6 +6,8 @@
 
 #!return math_out em nth root of number
 
+#!video https://www.youtube.com/watch?v=gDObl5lCF1w Math Functions for Minecraft Java 1.16
+
 #!objective em
 
 #!constant -1 em

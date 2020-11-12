@@ -4,6 +4,8 @@
 
 #!return math_out em sign: -1 if number is negative, 0 if number is 0, 1 if number is positive
 
+#!video https://www.youtube.com/watch?v=gDObl5lCF1w Math Functions for Minecraft Java 1.16
+
 #!objective em
 
 execute if score math_in1 em matches ..-1 run scoreboard players set math_out em -1

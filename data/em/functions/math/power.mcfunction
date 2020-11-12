@@ -5,6 +5,8 @@
 
 #!return math_out em base to the power of exponent
 
+#!video https://www.youtube.com/watch?v=gDObl5lCF1w Math Functions for Minecraft Java 1.16
+
 #!objective em
 
 #!constant 2 em

@@ -5,6 +5,8 @@
 
 #!return math_out em rounded number
 
+#!video https://www.youtube.com/watch?v=gDObl5lCF1w Math Functions for Minecraft Java 1.16
+
 #!objective em
 
 scoreboard players set #math__round__sign em 1

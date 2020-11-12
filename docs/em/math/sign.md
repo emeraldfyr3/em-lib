@@ -21,3 +21,9 @@ The function's output will be saved to these scoreboard values.
 | Player/Selector | Objective | Description                                                               |
 | --------------- | --------- | ------------------------------------------------------------------------- |
 | math_out        | em        | sign: -1 if number is negative, 0 if number is 0, 1 if number is positive |
+
+## Video
+
+### Math Functions for Minecraft Java 1.16
+
+[![YouTube video for em:math/sign](https://i3.ytimg.com/vi/gDObl5lCF1w/maxresdefault.jpg)](https://www.youtube.com/watch?v=gDObl5lCF1w)
