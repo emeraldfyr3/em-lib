@@ -45,8 +45,5 @@ scoreboard players set #2 em 2
 scoreboard players set #32768 em 32768
 scoreboard players set #65536 em 65536
 
-# Boss Bars
-bossbar add em:scorebar ""
-
 # Initialization Functions
 function _em:math/randomp/reseed

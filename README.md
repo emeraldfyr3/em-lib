@@ -10,5 +10,4 @@ Download the release for your Minecraft version here: https://github.com/emerald
 
 ## Functions
 - **em:math/**: Collection of mathematical functions, including random number generation, power, and root functions
-- **em:scorebar/**: Synchronize a bossbar's value with a player's score
 - **em:scoretp**: Teleport to coordinates in scoreboard values

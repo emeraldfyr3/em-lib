@@ -36,6 +36,3 @@ scoreboard objectives remove em
 scoreboard objectives remove scoretp_x
 scoreboard objectives remove scoretp_y
 scoreboard objectives remove scoretp_z
-
-# Boss Bars
-bossbar remove em:scorebar

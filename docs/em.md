@@ -14,7 +14,4 @@
   - [**root**](em/math/root.md)
   - [**round**](em/math/round.md)
   - [**sign**](em/math/sign.md)
-- [*scorebar*](em/scorebar.md)
-  - [**start**](em/scorebar/start.md)
-  - [**stop**](em/scorebar/stop.md)
 - [**scoretp**](em/scoretp.md)
