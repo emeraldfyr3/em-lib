@@ -143,7 +143,7 @@ $(markdownBreadcrumbs "$package" "$funcName")
         if [ "$docComments" ]
         then
           sed $'s/^/\\\n/' <<< "$docComments" >> "$docFile"
-          sed 's/"/\\"/g;s/^/,{"text":"\\\n/;s/$/"}/' <<< "$docComments" | tr -d '\n' >> "$helpFile"
+          sed 's/"/\\"/g;s/^/,{"text":"\\n/;s/$/"}/' <<< "$docComments" | tr -d '\n' >> "$helpFile"
         fi
 
         if [ "$params" ]
